@@ -1,12 +1,13 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
+# Eclipse projects
 
-# Compiled Dynamic libraries
-*.so
+.project
+.cproject
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
+# Binaries
+
+build/*
+build-bench/*
+
+# Generated documents
+
+doc/*
