@@ -13,7 +13,7 @@ include_directories($ENV{LIGHT_TEST_HOME})
 set(CMAKE_BUILD_TYPE "Release")
 
 if (MSVC)
-	set(LANG_FLAGS "/arch:SSE2 /EHsc")
+	set(LANG_FLAGS "/arch:SSE2 /DLSSE4_2 /EHsc")
 	set(WARNING_FLAGS "/W4")
 else (MSVC)
 	set(LANG_FLAGS "-std=c++0x -pedantic -march=native ")

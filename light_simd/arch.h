@@ -54,13 +54,26 @@
 
 // SIMD support detection
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) // for MSVC
 
 #if _M_IX86_FP >= 2
 #define LSIMD_HAS_SSE2
+
+#if (defined(LSSE3) || defined(LSSE4_1) || defined(LSSE4_2) )
+#define LSIMD_HAS_SSE3
 #endif
 
-#else
+#if (defined(LSSE4_1) || defined(LSSE4_2))
+#define LSIMD_HAS_SSE4_1
+#endif
+
+#if (defined(LSSE4_2))
+#define LSIMD_HAS_SSE4_2
+#endif
+
+#endif
+
+#else // for non-MSVC compiler
 
 #if defined(__SSE2__)
 #define LSIMD_HAS_SSE2
