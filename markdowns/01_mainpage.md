@@ -57,23 +57,25 @@ Generally, this requires very low-level stuff such as hand-coded register alloca
 ### Intrinsics
 
 An **intrinsic** is a built-in function that the compiler would directly maps to one or more assembly instructions. Intel specifies a large collection of intrinsics for SSE and AVX, which many modern compilers provide (nearly) complete support. As an example to demonstrate the use of SSE intrinsics, the following is a simple function that calculates ``y += a * x`` on arrays with n entries (here, we simply assume n is a multiple of 4 for simplicity).
-```C++
-void vadd_prod_f32(unsigned n, float a, const float *x, float *y)
-{
-    __m128 pa = _mm_set1_ps(a);
-    
-    unsigned m = n / 4;
-    for (unsigned i = 0; i < m; ++i, x += 4, y += 4)
+
+    void vadd_prod_f32(unsigned n, float a, const float *x, float *y)
     {
-        __m128 px = _mm_loadu_ps(x);
-        __m128 py = _mm_loadu_ps(y);
+        __m128 pa = _mm_set1_ps(a);
+    
+        unsigned m = n / 4;
+        for (unsigned i = 0; i < m; ++i, x += 4, y += 4)
+        {
+            __m128 px = _mm_loadu_ps(x);
+            __m128 py = _mm_loadu_ps(y);
         
-        py = _mm_add_ps(py, _mm_mul_ps(pa, px));
-        _mm_storeu_ps(y, py);
-    } 
-}
-```
+            py = _mm_add_ps(py, _mm_mul_ps(pa, px));
+            _mm_storeu_ps(y, py);
+        } 
+    }
+
+
 A modified function can be used for double-precision numbers:
+
 ```C++
 void vadd_prod_f64(unsigned n, double a, const double *x, double *y)
 {
@@ -90,6 +92,7 @@ void vadd_prod_f64(unsigned n, double a, const double *x, double *y)
     } 
 }
 ```
+
 Compared to inline assembly, the codes using intrinsics are easier to read and write. However, this way is not very satisfactory. It is limited in several aspects:
 * The SSE data types and function names for floats and doubles are different. The same task need to be implemented for different data types respectively.
 * The intrinsic function names such as ``_mm_loadu_ps`` and ``_mm_set1_pd`` are not very intuitive.
@@ -98,6 +101,7 @@ Compared to inline assembly, the codes using intrinsics are easier to read and w
 ### High-level generic library
 
 Through C++ template specialization mechanism, Light-SIMD provides generic interfaces for SIMD programming, where the architecture-dependent details are encapsulated. With Light-SIMD, users can write portable SIMD codes much more easily and cleanly. Below shows how a generic function to calculate ``y += a * x`` can be implemented using Light-SIMD.
+
 ```C++
 using namespace lsimd;
 
@@ -118,8 +122,10 @@ void vadd_prod(unsigned n, T a, const T *x, T *y)
     }
 }
 ```
+
 The code here is cleaner. More importantly, it is portable and can be used for different data types and on different instruction set architectures.
 For example, 
+
 ```C++
 float af, *xf, *yf; 
 double ad, *xd, *yd;
@@ -127,6 +133,7 @@ double ad, *xd, *yd;
 vadd_prod(n, af, xf, yf);
 vadd_prod(n, ad, xd, yd);
 ```
+
 The library will resolve the proper instruction set architecture to use, depending on compilation settings. This frees the developer of the tedious job of writing low-level architecture-dependent codes. 
 
 
