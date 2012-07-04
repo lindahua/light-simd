@@ -20,7 +20,7 @@ Light SIMD is a C++ template library that provides flexible and portable API for
 
 * Support of a rich set of operations, which include
   * arithmetic calculations
-  * power functions: ``sqrt``(x^(1/2)), ``sqr``(x^(2)), ``rcp``(x^(-1)), ``rsqrt``(x^(-1/2)), ``cube``(x^(3)), ``cbrt``(x^(1/3)), and ``pow``
+  * power functions: ``sqrt``, ``sqr``, ``rcp``, ``rsqrt``, ``cube``, ``cbrt``, and ``pow``
   * rounding functions: ``floor``, ``ceil``, and ``round``
   * exponential and logarithm functions: ``exp``, ``exp2``, ``exp10``, ``log``, ``log2``, and ``log10``
   * trigonometric functions: ``sin``, ``cos``, ``tan``, ``asin``, ``acos``, ``atan``, ``atan2``
@@ -58,35 +58,36 @@ Generally, this requires very low-level stuff such as hand-coded register alloca
 
 An **intrinsic** is a built-in function that the compiler would directly maps to one or more assembly instructions. Intel specifies a large collection of intrinsics for SSE and AVX, which many modern compilers provide (nearly) complete support. As an example to demonstrate the use of SSE intrinsics, the following is a simple function that calculates ``y += a * x`` on arrays with n entries (here, we simply assume n is a multiple of 4 for simplicity).
 
-    void vadd_prod_f32(unsigned n, float a, const float *x, float *y)
-    {
-        __m128 pa = _mm_set1_ps(a);
-    
-        unsigned m = n / 4;
-        for (unsigned i = 0; i < m; ++i, x += 4, y += 4)
-        {
-            __m128 px = _mm_loadu_ps(x);
-            __m128 py = _mm_loadu_ps(y);
-        
-            py = _mm_add_ps(py, _mm_mul_ps(pa, px));
-            _mm_storeu_ps(y, py);
-        } 
-    }
+```
+void vadd_prod_f32(unsigned n, float a, const float *x, float *y)
+{
+    __m128 pa = _mm_set1_ps(a);
 
+    unsigned m = n / 4;
+    for (unsigned i = 0; i < m; ++i, x += 4, y += 4)
+    {
+        __m128 px = _mm_loadu_ps(x);
+        __m128 py = _mm_loadu_ps(y);
+    
+        py = _mm_add_ps(py, _mm_mul_ps(pa, px));
+        _mm_storeu_ps(y, py);
+    } 
+}
+```
 
 A modified function can be used for double-precision numbers:
 
-```C++
+```
 void vadd_prod_f64(unsigned n, double a, const double *x, double *y)
 {
     __m128d pa = _mm_set1_pd(a);
-    
+   
     unsigned m = n / 2;
     for (unsigned i = 0; i < m; ++i, x += 2, y += 2)
     {
         __m128d px = _mm_loadu_pd(x);
         __m128d py = _mm_loadu_pd(y);
-        
+       
         py = _mm_add_pd(py, _mm_mul_pd(pa, px));
         _mm_storeu_pd(y, py);
     } 
@@ -102,7 +103,7 @@ Compared to inline assembly, the codes using intrinsics are easier to read and w
 
 Through C++ template specialization mechanism, Light-SIMD provides generic interfaces for SIMD programming, where the architecture-dependent details are encapsulated. With Light-SIMD, users can write portable SIMD codes much more easily and cleanly. Below shows how a generic function to calculate ``y += a * x`` can be implemented using Light-SIMD.
 
-```C++
+```
 using namespace lsimd;
 
 template<typename T>
@@ -110,13 +111,13 @@ void vadd_prod(unsigned n, T a, const T *x, T *y)
 {
     const unsigned wid = simd<T>::pack_width;
     const unsigned m = n / wid;
-    
+   
     simd_pack<T> pa(x, unaligned_t());
     for (unsigned i = 0; i < m; ++i, x += wid, y += wid)
     {
         simd_pack<T> px(x, unaligned_t());
         simd_pack<T> py(y, unaligned_t());
-        
+       
         py += pa * px;
         py.store(y, unaligned_t());
     }
@@ -126,7 +127,7 @@ void vadd_prod(unsigned n, T a, const T *x, T *y)
 The code here is cleaner. More importantly, it is portable and can be used for different data types and on different instruction set architectures.
 For example, 
 
-```C++
+```
 float af, *xf, *yf; 
 double ad, *xd, *yd;
 // *** some code to initialize the variables
