@@ -14,6 +14,7 @@
 #define LSIMD_SIMD_H_
 
 #include <light_simd/common/simd_pack.h>
+#include <light_simd/common/simd_logical.h>
 
 #include <light_simd/common/simd_arith.h>
 #include <light_simd/common/simd_math.h>

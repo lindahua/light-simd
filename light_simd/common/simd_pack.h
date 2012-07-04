@@ -552,6 +552,26 @@ namespace lsimd
 		///@{
 
 		/**
+		 * Get an mask pack with all bits set to zeros.
+		 *
+		 * @returns   A pack with all bits being 0s.
+		 */
+		LSIMD_ENSURE_INLINE static simd_pack false_mask()
+		{
+			return impl_type::false_mask();
+		}
+
+		/**
+		 * Get an mask pack with all bits set to ones.
+		 *
+		 * @returns   A pack with all bits being 1s.
+		 */
+		LSIMD_ENSURE_INLINE static simd_pack true_mask()
+		{
+			return impl_type::true_mask();
+		}
+
+		/**
 		 * Get an all-zero pack.
 		 *
 		 * @returns   A pack with all entries being zeros.
@@ -569,26 +589,6 @@ namespace lsimd
 		LSIMD_ENSURE_INLINE static simd_pack ones()
 		{
 			return impl_type::ones();
-		}
-
-		/**
-		 * Get an all-two pack.
-		 *
-		 * @returns   A pack with all entries being twos.
-		 */
-		LSIMD_ENSURE_INLINE static simd_pack twos()
-		{
-			return impl_type::twos();
-		}
-
-		/**
-		 * Get an all-half pack.
-		 *
-		 * @returns   A pack with all entries being 0.5.
-		 */
-		LSIMD_ENSURE_INLINE static simd_pack halfs()
-		{
-			return impl_type::halfs();
 		}
 
 		///@}

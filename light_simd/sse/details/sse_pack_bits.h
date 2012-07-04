@@ -25,6 +25,28 @@ namespace lsimd {  namespace sse {
 
 	/********************************************
 	 *
+	 *  constants
+	 *
+	 ********************************************/
+
+	inline __m128i all_zero_bits()
+	{
+		return _mm_setzero_si128();
+	}
+
+
+	inline __m128i all_one_bits()
+	{
+		return _mm_set_epi32(
+				(int)0xffffffff,
+				(int)0xffffffff,
+				(int)0xffffffff,
+				(int)0xffffffff);
+	}
+
+
+	/********************************************
+	 *
 	 *  partial load / store
 	 *
 	 ********************************************/

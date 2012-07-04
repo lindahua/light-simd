@@ -140,6 +140,26 @@ namespace lsimd
 			v = _mm_set_ps(e3, e2, e1, e0);
 		}
 
+
+		/**
+		 * Constructs a mask pack with given boolean values.
+		 *
+		 * @param b0   The value to be set to the bits of this->e[0].
+		 * @param b1   The value to be set to the bits of this->e[1].
+		 * @param b2   The value to be set to the bits of this->e[2].
+		 * @param b3   The value to be set to the bits of this->e[3].
+		 */
+		LSIMD_ENSURE_INLINE sse_pack(const bool b0, const bool b1, const bool b2, const bool b3)
+		{
+			const int i0 = b0 ? 0xffffffff : 0;
+			const int i1 = b1 ? 0xffffffff : 0;
+			const int i2 = b2 ? 0xffffffff : 0;
+			const int i3 = b3 ? 0xffffffff : 0;
+
+			v = _mm_castsi128_ps(_mm_set_epi32(i3, i2, i1, i0));
+		}
+
+
 		/**
 		 * Constructs a pack by loading the entry values from
 		 * a properly aligned memory address.
@@ -606,6 +626,25 @@ namespace lsimd
 		 */
 		///@{
 
+		/**
+		 * Get an mask pack with all bits set to zeros.
+		 *
+		 * @returns   A pack with all bits being 0s.
+		 */
+		LSIMD_ENSURE_INLINE static sse_pack false_mask()
+		{
+			return _mm_setzero_ps();
+		}
+
+		/**
+		 * Get an mask pack with all bits set to ones.
+		 *
+		 * @returns   A pack with all bits being 1s.
+		 */
+		LSIMD_ENSURE_INLINE static sse_pack true_mask()
+		{
+			return _mm_castsi128_ps(sse::all_one_bits());
+		}
 
 		/**
 		 * Get an all-zero pack.
@@ -627,28 +666,6 @@ namespace lsimd
 		LSIMD_ENSURE_INLINE static sse_pack ones()
 		{
 			return _mm_set1_ps(1.f);
-		}
-
-		/**
-		 * Get an all-two pack.
-		 *
-		 * @returns   A pack with all entries being twos,
-		 *            as (2, 2, 2, 2).
-		 */
-		LSIMD_ENSURE_INLINE static sse_pack twos()
-		{
-			return _mm_set1_ps(2.f);
-		}
-
-		/**
-		 * Get an all-half pack.
-		 *
-		 * @returns   A pack with all entries being 0.5,
-		 *            as (0.5, 0.5, 0.5, 0.5).
-		 */
-		LSIMD_ENSURE_INLINE static sse_pack halfs()
-		{
-			return _mm_set1_ps(0.5f);
 		}
 
 		///@}
@@ -757,6 +774,21 @@ namespace lsimd
 		LSIMD_ENSURE_INLINE sse_pack(const f64 e0, const f64 e1)
 		{
 			v = _mm_set_pd(e1, e0);
+		}
+
+
+		/**
+		 * Constructs a mask pack with given boolean values.
+		 *
+		 * @param b0   The value to be set to the bits of this->e[0].
+		 * @param b1   The value to be set to the bits of this->e[1].
+		 */
+		LSIMD_ENSURE_INLINE sse_pack(const bool b0, const bool b1)
+		{
+			int i0, i1, i2, i3;
+			i0 = i1 = (b0 ? 0xffffffff : 0);
+			i2 = i3 = (b1 ? 0xffffffff : 0);
+			v = _mm_castsi128_pd(_mm_set_epi32(i3, i2, i1, i0));
 		}
 
 		/**
@@ -1188,6 +1220,26 @@ namespace lsimd
 		///@{
 
 		/**
+		 * Get an mask pack with all bits set to zeros.
+		 *
+		 * @returns   A pack with all bits being 0s.
+		 */
+		LSIMD_ENSURE_INLINE static sse_pack false_mask()
+		{
+			return _mm_setzero_pd();
+		}
+
+		/**
+		 * Get an mask pack with all bits set to ones.
+		 *
+		 * @returns   A pack with all bits being 1s.
+		 */
+		LSIMD_ENSURE_INLINE static sse_pack true_mask()
+		{
+			return _mm_castsi128_pd(sse::all_one_bits());
+		}
+
+		/**
 		 * Get an all-zero pack.
 		 *
 		 * @returns   A pack with all entries being zeros, i.e. (0, 0).
@@ -1205,26 +1257,6 @@ namespace lsimd
 		LSIMD_ENSURE_INLINE static sse_pack ones()
 		{
 			return _mm_set1_pd(1.0);
-		}
-
-		/**
-		 * Get an all-two pack.
-		 *
-		 * @returns   A pack with all entries being twos, i.e. (2, 2).
-		 */
-		LSIMD_ENSURE_INLINE static sse_pack twos()
-		{
-			return _mm_set1_pd(2.0);
-		}
-
-		/**
-		 * Get an all-half pack.
-		 *
-		 * @returns   A pack with all entries being 0.5, i.e. (0.5, 0.5).
-		 */
-		LSIMD_ENSURE_INLINE static sse_pack halfs()
-		{
-			return _mm_set1_pd(0.5);
 		}
 
 		///@}
@@ -1267,7 +1299,6 @@ namespace lsimd
 
 
 	// Some auxiliary routines
-
 
 	/**
 	 * Constructing an SSE pack by moving two entries from a to 

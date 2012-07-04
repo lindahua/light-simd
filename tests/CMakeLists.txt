@@ -58,7 +58,8 @@ set(COMMON_BASIC_HS
     ${INC}/arch.h
     ${INC}/common/common_base.h 
     ${INC}/common/simd_pack.h
-    ${INC}/common/simd_arith.h)
+    ${INC}/common/simd_arith.h
+    ${INC}/common/simd_logical.h)
     
 set(COMMON_MATH_HS
     ${INC}/common/simd_math.h)
@@ -71,6 +72,7 @@ set(SSE_BASIC_HS
     ${INC}/sse/sse_base.h 
     ${INC}/sse/sse_pack.h 
     ${INC}/sse/sse_arith.h
+    ${INC}/sse/sse_logical.h
     ${INC}/sse/details/sse_pack_bits.h)
 
 set(SSE_MATH_HS 
@@ -105,6 +107,7 @@ add_library(test_main STATIC test_main.cpp)
 
 add_executable(test_sse_packs ${SSE_BASIC_DEP_HS} test_sse_packs.cpp)
 add_executable(test_sse_arith ${SSE_BASIC_DEP_HS} test_sse_arith.cpp)
+add_executable(test_sse_logical ${SSE_BASIC_DEP_HS} test_sse_logical.cpp)
 
 add_executable(test_sse_vecs ${SSE_LINALG_DEP_HS} test_sse_vecs.cpp)
 add_executable(test_sse_mats ${SSE_LINALG_DEP_HS} test_sse_mats.cpp)
@@ -115,6 +118,7 @@ add_executable(test_sse_math_svml ${SSE_MATH_DEP_HS} test_sse_math.cpp)
 
 target_link_libraries(test_sse_packs test_main)
 target_link_libraries(test_sse_arith test_main)
+target_link_libraries(test_sse_logical test_main)
 
 if (MSVC)
 target_link_libraries(test_sse_math_svml test_main ${SVML} ${LIBIRC})
@@ -130,6 +134,7 @@ target_link_libraries(test_sse_sol test_main)
 set(ALL_EXECUTABLES 
     test_sse_packs
     test_sse_arith
+    test_sse_logical
     test_sse_vecs
     test_sse_mats
     test_sse_mm
@@ -149,6 +154,7 @@ set_target_properties(test_sse_math_svml
 
 add_test(NAME sse_packs COMMAND test_sse_packs)
 add_test(NAME sse_arith COMMAND test_sse_arith)
+add_test(NAME sse_logical COMMAND test_sse_logical)
 
 add_test(NAME sse_vecs COMMAND test_sse_vecs)
 add_test(NAME sse_mats COMMAND test_sse_mats)
