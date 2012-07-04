@@ -151,10 +151,10 @@ namespace lsimd
 		 */
 		LSIMD_ENSURE_INLINE sse_pack(const bool b0, const bool b1, const bool b2, const bool b3)
 		{
-			const int i0 = b0 ? 0xffffffff : 0;
-			const int i1 = b1 ? 0xffffffff : 0;
-			const int i2 = b2 ? 0xffffffff : 0;
-			const int i3 = b3 ? 0xffffffff : 0;
+			const int i0 = b0 ? (int)(0xffffffff) : 0;
+			const int i1 = b1 ? (int)(0xffffffff) : 0;
+			const int i2 = b2 ? (int)(0xffffffff) : 0;
+			const int i3 = b3 ? (int)(0xffffffff) : 0;
 
 			v = _mm_castsi128_ps(_mm_set_epi32(i3, i2, i1, i0));
 		}
@@ -786,8 +786,8 @@ namespace lsimd
 		LSIMD_ENSURE_INLINE sse_pack(const bool b0, const bool b1)
 		{
 			int i0, i1, i2, i3;
-			i0 = i1 = (b0 ? 0xffffffff : 0);
-			i2 = i3 = (b1 ? 0xffffffff : 0);
+			i0 = i1 = (b0 ? (int)(0xffffffff) : 0);
+			i2 = i3 = (b1 ? (int)(0xffffffff) : 0);
 			v = _mm_castsi128_pd(_mm_set_epi32(i3, i2, i1, i0));
 		}
 
