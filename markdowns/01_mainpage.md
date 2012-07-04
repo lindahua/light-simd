@@ -12,32 +12,51 @@ Most modern computers support SIMD instruction sets.
 
 SSE has eight or sixteen 128-bit XMM registers, which may hold four single-precision or two double-precision floating-point numbers. An SSE instruction can perform operations on two XMM registers (_e.g._ adding four single-precision real numbers with another four at the same time).  In 2012, Intel introduced [AVX (Advanced Vector Extensions)](http://en.wikipedia.org/wiki/Advanced_Vector_Extensions) with the Sandy bridge processors. AVX has sixteen 256-bit YMM registers, which can accommodate up to eight single-precision or four double precision floating point numbers. Though introduced by Intel, SSE and AVX are also supported by AMD processors.
 
-## Overview of Light SIMD
+## Main Features of Light SIMD
+
 
 Light SIMD is a C++ template library that provides flexible and portable API for writing SIMD codes. In addition, it has the following features.
 
 * Generic interfaces for writing platform-independent codes.
 
 * Support of a rich set of operations, which include
-  * arithmetic calculations
-  * power functions: ``sqrt``, ``sqr``, ``rcp``, ``rsqrt``, ``cube``, ``cbrt``, and ``pow``
-  * rounding functions: ``floor``, ``ceil``, and ``round``
-  * exponential and logarithm functions: ``exp``, ``exp2``, ``exp10``, ``log``, ``log2``, and ``log10``
-  * trigonometric functions: ``sin``, ``cos``, ``tan``, ``asin``, ``acos``, ``atan``, ``atan2``
-  * hyperbolic functions: ``sinh``, ``cosh``, ``tanh``, ``asinh``, ``acosh``, and ``atanh``
-  * other math functions: ``hypot``, ``erf``, and ``erfc``
-  * comparison and logical operations 
-  * reduction functions: ``sum``, ``max``, and ``min``
-  * entry manipulation, _e.g._ swizzling, shuffling, shifting, and broadcasting, etc
+    * arithmetic calculations
+    * math functions, including a full coverage of transcendental functions:
+        + power functions: 
+          [sqrt](funrefs/sqrt.html), 
+          [sqr](funrefs/sqr.html), 
+          [rcp](funrefs/rcp.html), 
+          [rsqrt](funrefs/rsqrt.html), 
+          [cube](funrefs/cube.html),
+          [cbrt](funrefs/cbrt.html), 
+          and 
+          [pow](funrefs/pow.html)
+        + rounding functions: ``floor``, ``ceil``, and ``round``
+        + exponential and logarithm functions: 
+          ``exp``, ``exp2``, ``exp10``, 
+          ``log``, ``log2``, and ``log10``
+        + trigonometric functions: 
+          ``sin``, ``cos``, ``tan``, 
+          ``asin``, ``acos``, ``atan``, ``atan2``
+        + hyperbolic functions: 
+          ``sinh``, ``cosh``, ``tanh``, 
+          ``asinh``, ``acosh``, and ``atanh``
+        + other math functions: ``hypot``, ``erf``, and ``erfc``
+    * comparison and logical operations 
+    * reduction functions: ``sum``, ``max``, and ``min``
+    * entry manipulation, _e.g._ swizzling, shuffling, shifting, and broadcasting, etc
   
 * Linear algebra module, which contains SIMD-based classes to represent small vectors and matrices. This module also implements a variety of linear algebraic computation with hand optimized codes
-  * template classes to represent small fixed-size vectors and matrices
-  * specialized codes optimized for vectors of length ``2``, ``3``, or ``4``.
-  * specialized codes optimized for matrices of size ``2 x 2``, ``2 x 3``, ``2 x 4``, ``3 x 2``, ``3 x 3``, ``3 x 4``, ``4 x 2``, ``4 x 3``, and ``4 x 4``
-  * matrix-vector and matrix-matrix products
-  * evaluation of trace and determinant
-  * matrix inversion
-  * linear equation solving
+    * template classes to represent small fixed-size vectors and matrices
+    * codes specially optimized for vectors of lengths: ``2``, ``3``, or ``4``.
+    * codes specially optimized for matrices of sizes: 
+      ``2 x 2``, ``2 x 3``, ``2 x 4``, 
+      ``3 x 2``, ``3 x 3``, ``3 x 4``, 
+      ``4 x 2``, ``4 x 3``, and ``4 x 4``
+    * matrix-vector and matrix-matrix products
+    * evaluation of trace and determinant
+    * matrix inversion
+    * linear equation solving
   
 * Light weight classes and always-inlined functions, which incur zero run-time overhead (in release mode). 
 

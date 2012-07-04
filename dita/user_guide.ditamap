@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN"
+"bookmap.dtd">
+<bookmap>
+    <title>Light SIMD User Guide</title>
+    <bookmeta>
+        <author>Dahua Lin</author>
+        <authorinformation>
+            <personinfo>
+                <namedetails>
+                    <personname>
+                        <firstname>Dahua</firstname>
+                        <lastname>Lin</lastname>
+                    </personname>
+                </namedetails>
+                <emailaddresses>
+                    <emailaddress>dhlin@mit.edu</emailaddress>
+                </emailaddresses>
+            </personinfo>
+        </authorinformation>
+        <critdates>
+            <created date="July 4, 2012"/>
+        </critdates>
+    </bookmeta>
+    <frontmatter>
+        <booklists>
+            <toc/>
+        </booklists>
+    </frontmatter>
+    <chapter navtitle="Basics">
+        <topicref href="overview.dita"/>
+        <topicref href="what_is_simd.dita"/>
+    </chapter>
+    <appendix href="funrefs/fun_list.dita">
+        <topicref href="funrefs/sqrt.dita"/>
+    </appendix>
+</bookmap>

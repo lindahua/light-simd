@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic_rvx_b3p_5g">
+  <title>Function List</title>
+  <body>
+    <section><title>Power functions</title>
+      <ul>
+        <li><xref href="sqrt.dita">sqrt</xref></li>
+      </ul>
+    </section>
+  </body>
+</topic>

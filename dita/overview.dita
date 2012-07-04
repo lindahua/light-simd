@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="overview">
+  <title>Overview</title>
+
+  <body>
+    <p>Light SIMD is a a light-weight C++ library for SIMD-based
+    computation.</p>
+  </body>
+</topic>
