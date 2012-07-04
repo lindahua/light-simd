@@ -9,6 +9,4 @@
 build/*
 build-bench/*
 
-# Generated documents
-
 doc/*
