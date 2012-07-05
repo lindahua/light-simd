@@ -1,35 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
-"concept.dtd">
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="what_is_simd">
-  <title>What is SIMD</title>
-
-  <shortdesc><b>SIMD (Single Instruction, Multiple Data)</b> generally refers
-  to instruction sets to support data-parallel computation.</shortdesc>
-
-  <conbody>
-    <p>An SIMD instruction may operate on multiple data simultaneously within
-    one or a few CPU cycles. Many numerical algorithms involve repeatedly
-    applying the same sequence of math operations to thousands or millions of
-    data values. In this programs, proper use of SIMD can often lead to
-    substantial improvement of run-time performance. </p>
-
-    <p>Most modern computers support SIMD instruction sets. <xref
-    href="http://en.wikipedia.org/wiki/Streaming_SIMD_Extensions" format="html" scope="external">SSE
-    (Streaming SIMD Extensions)</xref>, which was introduced in 1999 by Intel
-    in their Pentium III processors, is probably one of the most widely used
-    SIMD instruction architecture. SSE was subsequently expanded to SSE2,
-    SSE3, SSSE3, and SSE4. </p>
-
-    <p>SSE has eight or sixteen 128-bit XMM registers, which may hold four
-    single-precision or two double-precision floating-point numbers. An SSE
-    instruction can perform operations on two XMM registers (e.g. adding four
-    single-precision real numbers with another four at the same time). In
-    2012, Intel introduced <xref
+ <title>What is SIMD</title>
+ <shortdesc><b>SIMD (Single Instruction, Multiple Data)</b> generally refers to instruction sets
+  that support data-parallel computation.</shortdesc>
+ <conbody>
+  <p> An SIMD instruction may operate on multiple data
+   simultaneously within one or a few CPU cycles. Many numerical algorithms involve repeatedly
+   applying the same sequence of math operations to thousands or millions of data values. In
+   this programs, proper use of SIMD can often lead to substantial improvement of run-time
+   performance.</p>
+  
+  <p>Most modern computers support SIMD instruction sets. <xref
+   href="http://en.wikipedia.org/wiki/Streaming_SIMD_Extensions" format="html" scope="external">SSE
+   (Streaming SIMD Extensions)</xref>, which was introduced in 1999 by Intel
+   in their Pentium III processors, is probably one of the most widely used
+   SIMD instruction architecture. SSE was subsequently expanded to SSE2,
+   SSE3, SSSE3, and SSE4. </p>
+  
+  <p>SSE has eight or sixteen 128-bit XMM registers, which may hold four
+   single-precision or two double-precision floating-point numbers. An SSE
+   instruction can perform operations on two XMM registers (e.g. adding four
+   single-precision real numbers with another four at the same time). In
+   2012, Intel introduced <xref
     href="http://en.wikipedia.org/wiki/Advanced_Vector_Extensions" format="html" scope="external">AVX
     (Advanced Vector Extensions)</xref> with the Sandy bridge processors. AVX
-    has sixteen 256-bit YMM registers, which can accommodate up to eight
-    single-precision or four double precision floating point numbers. Though
-    introduced by Intel, SSE and AVX are also supported by AMD processors.</p>
-  </conbody>
+   has sixteen 256-bit YMM registers, which can accommodate up to eight
+   single-precision or four double precision floating point numbers. Though
+   introduced by Intel, SSE and AVX are also supported by AMD processors.</p>
+ </conbody>
 </concept>

@@ -28,10 +28,14 @@
         </booklists>
     </frontmatter>
     <chapter navtitle="Basics">
-        <topicref href="overview.dita"/>
-        <topicref href="what_is_simd.dita"/>
+        <topicref href="overview.dita">
+            <topicref href="what_is_simd.dita"/>
+            <topicref href="main_features.dita"/>
+            <topicref href="write_simd_codes.dita"/>
+        </topicref>
     </chapter>
-    <appendix href="funrefs/fun_list.dita">
+    <appendix navtitle="Function Lists" href="funrefs/fun_list.dita">
+        <topicref href="funrefs/exp.dita"/>
         <topicref href="funrefs/sqrt.dita"/>
     </appendix>
 </bookmap>

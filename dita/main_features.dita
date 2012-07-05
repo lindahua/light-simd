@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="main_features">
+  <title>Main Features of Light SIMD</title>
+  <body>
+    <p>Light SIMD is a C++ template library that provides flexible and portable API for writing SIMD
+      codes. In addition, it has the following features.</p>
+    <ul id="main_features_ul">
+      <li>Generic interfaces for writing platform-independent codes.</li>
+      <li>Support of a rich set of functions, which include <ul>
+        <li>arithmetic calculation</li>
+        <li>a full coverage of transcendental math functions</li>
+        <li>comparison and logical operations</li>
+        <li>reduction functions (e.g. sum, max, and min)</li>
+        <li>entry manipulation (e.g. swizzling, shuffling, shifting, and entry extraction)</li>
+      </ul>
+        See the
+        <xref href="funrefs/fun_list.dita">function list</xref> for details. 
+      </li>
+      <li>Comparison and logical operations</li>
+      <li>Linear algebra module, which contains SIMD-based classes to represent small vectors and
+        matrices, and a variety of linear algebraic computation:<ul id="ul_ljm_t2r_5g">
+          <li>template classes to represent small fixed-size vectors and matrices</li>
+          <li>matrix-vector and matrix-matrix products</li>
+          <li>evaluation of trace and determinant</li>
+          <li>matrix inversion and linear equation solving</li>
+          <li>codes specially optimized for vectors of lengths 2, 3, and 4 and matrices of sizes: 2
+            x 2, 2 x 3, 2 x 4, 3 x 2, 3 x 3, 3 x 4, 4 x 2, 4 x 3, and 4 x 4</li>
+        </ul></li>
+      <li>Light weight classes and always-inlined functions, which incur zero run-time overhead
+        (in release mode). </li>
+      <li>Extensively tested using hundreds of unit testing cases.</li>
+    </ul>
+  </body>
+</topic>

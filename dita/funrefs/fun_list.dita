@@ -1,12 +1,190 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
-<topic id="topic_rvx_b3p_5g">
+<topic id="fun_list">
   <title>Function List</title>
   <body>
-    <section><title>Power functions</title>
-      <ul>
-        <li><xref href="sqrt.dita">sqrt</xref></li>
-      </ul>
+    <section>
+      <title>Rounding functions</title>
+      <table frame="topbot" id="table_round_funs">
+        <tgroup cols="2">
+          <colspec colname="name" colnum="1" colwidth="100pt"/>
+          <colspec colname="desc" colnum="2" colwidth="320pt"/>
+          <tbody>
+            <row>
+              <entry>floor</entry>
+              <entry>nearest integer lower bound</entry>
+            </row>
+            <row>
+              <entry>ceil</entry>
+              <entry>nearest integer upper bound</entry>
+            </row>
+            <row>
+              <entry>trunc</entry>
+              <entry>rounding by truncation</entry>
+            </row>
+            <row>
+              <entry>round</entry>
+              <entry>rounding to nearest integer</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>Power functions</title>
+      <table frame="topbot" id="table_power_funs">
+        <tgroup cols="2">
+          <colspec colname="name" colnum="1" colwidth="100pt"/>
+          <colspec colname="desc" colnum="2" colwidth="320pt"/>
+          <tbody>
+            <row>
+              <entry>sqr</entry>
+              <entry>square</entry>
+            </row>
+            <row>
+              <entry><xref href="sqrt.dita">sqrt</xref></entry>
+              <entry>square root</entry>
+            </row>
+            <row>
+              <entry>rcp</entry>
+              <entry>reciprocal</entry>
+            </row>
+            <row>
+              <entry>rsqrt</entry>
+              <entry>reciprocal of square root</entry>
+            </row>
+            <row>
+              <entry>hypot</entry>
+              <entry>hypotenuse</entry>
+            </row>
+            <row>
+              <entry>cube</entry>
+              <entry>cube (raised to power 3)</entry>
+            </row>
+            <row>
+              <entry>cbrt</entry>
+              <entry>cubic root</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>Exponential and logarithm functions</title>
+      <table frame="topbot" id="table_explog_funs">
+        <tgroup cols="2">
+          <colspec colname="name" colnum="1" colwidth="100pt"/>
+          <colspec colname="desc" colnum="2" colwidth="320pt"/>
+          <tbody>
+            <row>
+              <entry><xref href="exp.dita">exp</xref></entry>
+              <entry>exponential function</entry>
+            </row>
+            <row>
+              <entry>exp2</entry>
+              <entry>2 raised to an input power</entry>
+            </row>
+            <row>
+              <entry>exp10</entry>
+              <entry>10 raised to an input power</entry>
+            </row>
+            <row>
+              <entry>log</entry>
+              <entry>natural logarithm</entry>
+            </row>
+            <row>
+              <entry>log2</entry>
+              <entry>logarithm with base 2</entry>
+            </row>
+            <row>
+              <entry>log10</entry>
+              <entry>common logarithm (with base 10)</entry>
+            </row>
+            <row>
+              <entry>expm1</entry>
+              <entry>accurate calculation of exp(x) - 1</entry>
+            </row>
+            <row>
+              <entry>log1p</entry>
+              <entry>accurate calculation of log(1 + x)</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>Trigonometic functions</title>
+      <table frame="topbot" id="table_trig_funs">
+        <tgroup cols="2">
+          <colspec colname="name" colnum="1" colwidth="100pt"/>
+          <colspec colname="desc" colnum="2" colwidth="320pt"/>
+          <tbody>
+            <row>
+              <entry>sin</entry>
+              <entry>sine</entry>
+            </row>
+            <row>
+              <entry>cos</entry>
+              <entry>cosine</entry>
+            </row>
+            <row>
+              <entry>tan</entry>
+              <entry>tangent</entry>
+            </row>
+            <row>
+              <entry>asin</entry>
+              <entry>arc sine</entry>
+            </row>
+            <row>
+              <entry>acos</entry>
+              <entry>arc cosine</entry>
+            </row>
+            <row>
+              <entry>atan</entry>
+              <entry>arc tangent</entry>
+            </row>
+            <row>
+              <entry>atan2</entry>
+              <entry>arc tangent (with two arguments)</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>Hyperbolic functions</title>
+      <table frame="topbot" id="table_hyperbolic_funs">
+        <tgroup cols="2">
+          <colspec colname="name" colnum="1" colwidth="100pt"/>
+          <colspec colname="desc" colnum="2" colwidth="320pt"/>
+          <tbody>
+            <row>
+              <entry>sinh</entry>
+              <entry>hyperbolic sine</entry>
+            </row>
+            <row>
+              <entry>cosh</entry>
+              <entry>hyperbolic cosine</entry>
+            </row>
+            <row>
+              <entry>tanh</entry>
+              <entry>hyperbolic tangent</entry>
+            </row>
+            <row>
+              <entry>asinh</entry>
+              <entry>hyperbolic arc sine</entry>
+            </row>
+            <row>
+              <entry>acosh</entry>
+              <entry>hyperbolic arc cosine</entry>
+            </row>
+            <row>
+              <entry>atanh</entry>
+              <entry>hyperbolic arc tangent</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
     </section>
   </body>
 </topic>

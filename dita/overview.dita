@@ -3,9 +3,7 @@
 "topic.dtd">
 <topic id="overview">
   <title>Overview</title>
-
-  <body>
-    <p>Light SIMD is a a light-weight C++ library for SIMD-based
-    computation.</p>
-  </body>
+  <shortdesc>Light SIMD is a light-weight C++ library for SIMD-based
+    computation.</shortdesc>
+  <body/>
 </topic>
