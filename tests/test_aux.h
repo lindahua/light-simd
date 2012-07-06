@@ -152,9 +152,9 @@ namespace lsimd
 	 ********************************************/
 
 	template<typename T, typename Kind, class Op>
-	double eval_approx_accuracy(unsigned n, const T lb_a, const T ub_a)
+	unsigned int eval_approx_ulp(unsigned n, const T lb_a, const T ub_a)
 	{
-		double max_dev = 0.0;
+		unsigned int max_ulp = 0;
 		const unsigned w = simd<T, Kind>::pack_width;
 		LSIMD_ALIGN_SSE T src[w];
 		LSIMD_ALIGN_SSE T dst[w];
@@ -182,20 +182,21 @@ namespace lsimd
 
 			for (unsigned i = 0; i < w; ++i)
 			{
-				double cdev = std::fabs(double(dst[i]) - double(r0[i])) / double(r0[i]);
-				if (cdev > max_dev) max_dev = cdev;
+				unsigned int ulp = ltest::ulp_distance(dst[i], r0[i]);
+				if (ulp > max_ulp) max_ulp = ulp;
 			}
 		}
 
-		return max_dev;
+		return max_ulp;
 	}
 
+
 	template<typename T, typename Kind, class Op>
-	double eval_approx_accuracy(unsigned n,
+	unsigned int eval_approx_ulp(unsigned n,
 			const T lb_a, const T ub_a,
 			const T lb_b, const T ub_b)
 	{
-		double max_dev = 0.0;
+		unsigned int max_ulp = 0;
 		const unsigned w = simd<T, Kind>::pack_width;
 		LSIMD_ALIGN_SSE T sa[w];
 		LSIMD_ALIGN_SSE T sb[w];
@@ -227,12 +228,12 @@ namespace lsimd
 
 			for (unsigned i = 0; i < w; ++i)
 			{
-				double cdev = std::fabs(double(dst[i]) - double(r0[i])) / double(r0[i]);
-				if (cdev > max_dev) max_dev = cdev;
+				unsigned int ulp = ltest::ulp_distance(dst[i], r0[i]);
+				if (ulp > max_ulp) max_ulp = ulp;
 			}
 		}
 
-		return max_dev;
+		return max_ulp;
 	}
 
 }

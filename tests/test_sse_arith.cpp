@@ -26,15 +26,15 @@ inline void print_pass(bool passed)
 
 
 template<typename T, template<typename U> class OpT>
-bool test_accuracy_u(T tol = sizeof(T) == 4 ? T(tol_f32) : T(tol_f64))
+bool test_accuracy_u(unsigned int tol=1)
 {
 	T lb_x = OpT<T>::lb_x();
 	T ub_x = OpT<T>::ub_x();
 
-	double maxdev = eval_approx_accuracy<T, sse_kind, OpT<T> >(N, lb_x, ub_x);
-	bool passed = maxdev < tol;
+	unsigned max_ulp = eval_approx_ulp<T, sse_kind, OpT<T> >(N, lb_x, ub_x);
+	bool passed = max_ulp <= tol;
 
-	std::printf("\t%-9s:    max-rdev = %10.3g  ... ", OpT<T>::name(), maxdev);
+	std::printf("\t%-9s:    max-ulp = %2u  ... ", OpT<T>::name(), max_ulp);
 	print_pass(passed);
 	std::printf("\n");
 
@@ -42,7 +42,7 @@ bool test_accuracy_u(T tol = sizeof(T) == 4 ? T(tol_f32) : T(tol_f64))
 }
 
 template<typename T, template<typename U> class OpT>
-bool test_accuracy_b(T tol = sizeof(T) == 4 ? T(tol_f32) : T(tol_f64))
+bool test_accuracy_b(unsigned int tol=1)
 {
 	T lb_x = OpT<T>::lb_x();
 	T ub_x = OpT<T>::ub_x();
@@ -50,10 +50,10 @@ bool test_accuracy_b(T tol = sizeof(T) == 4 ? T(tol_f32) : T(tol_f64))
 	T lb_y = OpT<T>::lb_y();
 	T ub_y = OpT<T>::ub_y();
 
-	double maxdev = eval_approx_accuracy<T, sse_kind, OpT<T> >(N, lb_x, ub_x, lb_y, ub_y);
-	bool passed = maxdev < tol;
+	unsigned max_ulp = eval_approx_ulp<T, sse_kind, OpT<T> >(N, lb_x, ub_x, lb_y, ub_y);
+	bool passed = max_ulp <= tol;
 
-	std::printf("\t%-9s:    max-rdev = %10.3g  ... ", OpT<T>::name(), maxdev);
+	std::printf("\t%-9s:    max-ulp = %2u  ... ", OpT<T>::name(), max_ulp);
 	print_pass(passed);
 	std::printf("\n");
 
@@ -441,8 +441,8 @@ int main(int argc, char *argv[])
 	std::printf("================================\n");
 	if (!test_all<f32>()) passed = false;
 
-	if (!test_accuracy_u<f32, rcp_a_ts>(1.e-3f)) passed = false;
-	if (!test_accuracy_u<f32, rsqrt_a_ts>(1.e-3f)) passed = false;
+	if (!test_accuracy_u<f32, rcp_a_ts>(14)) passed = false;
+	if (!test_accuracy_u<f32, rsqrt_a_ts>(14)) passed = false;
 
 	std::printf("\n");
 

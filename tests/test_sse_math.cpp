@@ -15,9 +15,6 @@ using namespace lsimd;
 
 const int N = 50 * 1024;
 
-const double tol_f32 = 1.e-6;
-const double tol_f64 = 1.0e-15;
-
 inline void print_pass(bool passed)
 {
 	if (passed)
@@ -27,16 +24,16 @@ inline void print_pass(bool passed)
 }
 
 template<typename T, template<typename U> class OpT>
-bool test_accuracy_u(T tol = sizeof(T) == 4 ? T(tol_f32) : T(tol_f64))
+bool test_accuracy_u(unsigned int tol = 6)
 {
 	T lb_x = OpT<T>::lb_x();
 	T ub_x = OpT<T>::ub_x();
 
-	double max_rdev = eval_approx_accuracy<T, sse_kind, OpT<T> >(N, lb_x, ub_x);
-	bool passed = max_rdev < tol;
+	unsigned int max_ulp = eval_approx_ulp<T, sse_kind, OpT<T> >(N, lb_x, ub_x);
+	bool passed = max_ulp <= tol;
 
-	std::printf("  %-6s [%4g:%4g]             ==> max-rdev = %10.3g  ...  ",
-			OpT<T>::name(), OpT<T>::lb_x(), OpT<T>::ub_x(), max_rdev);
+	std::printf("  %-6s [%4g:%4g]             ==> max-rdev = %2u  ...  ",
+			OpT<T>::name(), OpT<T>::lb_x(), OpT<T>::ub_x(), max_ulp);
 	print_pass(passed);
 	std::printf("\n");
 
@@ -44,7 +41,7 @@ bool test_accuracy_u(T tol = sizeof(T) == 4 ? T(tol_f32) : T(tol_f64))
 }
 
 template<typename T, template<typename U> class OpT>
-bool test_accuracy_b(T tol = sizeof(T) == 4 ? T(tol_f32) : T(tol_f64))
+bool test_accuracy_b(unsigned int tol = 6)
 {
 	T lb_x = OpT<T>::lb_x();
 	T ub_x = OpT<T>::ub_x();
@@ -52,14 +49,14 @@ bool test_accuracy_b(T tol = sizeof(T) == 4 ? T(tol_f32) : T(tol_f64))
 	T lb_y = OpT<T>::lb_y();
 	T ub_y = OpT<T>::ub_y();
 
-	double max_rdev = eval_approx_accuracy<T, sse_kind, OpT<T> >(N, lb_x, ub_x, lb_y, ub_y);
-	bool passed = max_rdev < tol;
+	unsigned int max_ulp = eval_approx_ulp<T, sse_kind, OpT<T> >(N, lb_x, ub_x, lb_y, ub_y);
+	bool passed = max_ulp < tol;
 
-	std::printf("  %-6s [%4g:%4g] [%4g:%4g] ==> max-rdev = %10.3g  ...  ",
+	std::printf("  %-6s [%4g:%4g] [%4g:%4g] ==> max-rdev = %2u  ...  ",
 			OpT<T>::name(),
 			OpT<T>::lb_x(), OpT<T>::ub_x(),
 			OpT<T>::lb_y(), OpT<T>::ub_y(),
-			max_rdev);
+			max_ulp);
 	print_pass(passed);
 	std::printf("\n");
 
@@ -455,8 +452,8 @@ struct acosh_s
 {
 	static const char *name() { return "acosh"; }
 
-	static T lb_x() { return T(-1); }
-	static T ub_x() { return T(1); }
+	static T lb_x() { return T(1.1); }
+	static T ub_x() { return T(3.0); }
 
 	static T eval_scalar(const T x) { return std::acosh(x); }
 
@@ -472,8 +469,8 @@ struct atanh_s
 {
 	static const char *name() { return "atanh"; }
 
-	static T lb_x() { return T(-10); }
-	static T ub_x() { return T(10); }
+	static T lb_x() { return T(-0.8); }
+	static T ub_x() { return T(0.8); }
 
 	static T eval_scalar(const T x) { return std::atanh(x); }
 
@@ -586,7 +583,7 @@ bool test_all()
 	std::printf("error functions:\n");
 	std::printf("----------------------------\n");
 
-#ifdef LSIMD_HAS_C99_SCALAR_MATH
+#if (defined(LSIMD_HAS_C99_SCALAR_MATH) && defined(LSIMD_HAS_SSE_ERF))
 
 	passed &= test_accuracy_u<T, erf_s>();
 	passed &= test_accuracy_u<T, erfc_s>();
