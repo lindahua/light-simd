@@ -12,7 +12,7 @@
       <parml>
         <plentry>
           <pt>x</pt>
-          <pd>The input pack.</pd>
+          <pd>The input pack.<note>The entry values should be non-negative.</note></pd>
         </plentry>
       </parml>
     </section>
