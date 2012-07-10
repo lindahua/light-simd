@@ -66,12 +66,11 @@
     </section>
     <section>
       <title>High-level generic library</title>
-      <p>Through C++ template specialization mechanism, <xref
-          href="main_features.dita#main_features">Light-SIMD</xref> provides generic interfaces for
-        SIMD programming, where the architecture-dependent details are encapsulated. With
-        Light-SIMD, users can write portable SIMD codes much more easily and cleanly. Below shows
-        how a generic function to calculate <codeph>y += a * x</codeph> can be implemented using
-        Light-SIMD.</p>
+      <p>Through C++ template specialization mechanism, <xref href="overview.dita">Light-SIMD</xref>
+        provides generic interfaces for SIMD programming, where the architecture-dependent details
+        are encapsulated. With Light-SIMD, users can write portable SIMD codes much more easily and
+        cleanly. Below shows how a generic function to calculate <codeph>y += a * x</codeph> can be
+        implemented using Light-SIMD.</p>
       <codeblock><keyword>using namespace</keyword> lsimd;
 
 <keyword>template</keyword>&lt;<keyword>typename</keyword> T>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="sse">
+ <title>Streaming SIMD Extensions (SSE)</title>
+ <shortdesc><term>SSE (Streaming SIMD Extensions)</term> is an SIMD instruction set extension to the
+  x86 architecture. SSE adds 128-bit XMM registers and a set of new instructions that can operate on
+  128-bit data at the same time.</shortdesc>
+ <conbody>
+  <p>SSE was designed by Intel and introduced in 1999 along with their Pentium III series
+   processors. SSE contains 70 new instructions, most of which work on single-precision floating
+   point data. SSE was subsequently expanded to SSE2, SSE3, SSSE3 (Supplemental SSE3) and SSE4, with
+   additional support of double-precision floating point and integer operations. Whereas SSE was
+   developed by Intel, AMD added support for SSE instructions in 1999, with its Athlon and Duron
+   series processors.</p>
+  <section>
+   <title>XMM Registers</title>
+   <p>Originally, SSE contains eight 128-bit registers, often referred to as XMM0 to XMM7. Later
+    extensions add eight additional registers: XMM8 to XMM15, which are accessible only in 64-bit
+    operating modes.</p>
+   <p>SSE only used one data type for XMM registers:<ul id="ul_onh_yvf_wg">
+     <li>four 32-bit single-precision floating point numbers</li>
+    </ul></p>
+   <p>Since SSE2, XMM can be used to host data of other types:<ul id="ul_s3x_dwf_wg">
+     <li>two 64-bit double-precision floating point numbers</li>
+     <li>two 64-bit integers</li>
+     <li>four 32-bit integers</li>
+     <li>eight 16-bit integers</li>
+     <li>sixteen 8-bit integers</li>
+    </ul></p>
+   <p>An SSE instruction can operate on all data contained in an XMM register. When the same
+    operation is to be applied to multiple data, proper use of SSE instructions can substantially
+    increase the performance, as opposed to scalar operations.</p>
+  </section>
+  <section>
+   <title>Instructions</title>
+   <p>SSE contains both scalar instructions (operate on a single number in XMM register) and packed
+    instructions (operate on all numbers in an XMM register). The types of operations supported by
+    SSE and its extensions include<ul id="ul_trn_zwf_wg">
+     <li>movement between XMM registers and memory</li>
+     <li>arithmetic calculation</li>
+     <li>comparison</li>
+     <li>bitwise logical operations</li>
+     <li>data manipulation (e.g. shuffling, shifting, packing, etc)</li>
+     <li>conversion between different data types</li>
+     <li>supporting instructions (e.g. memory and cache management)</li>
+    </ul></p>
+  </section>
+  <section>
+   <title>Use of SSE</title>
+   <p>Generally, codes without explicit use of SSE instructions would not lead to executable
+    binaries that leverages the benefits of SSE. Developers have to write inline-assembly or call
+    SSE intrinsics. Some modern compilers with the capability of auto vectorization, such as Intel
+    C++ Compiler, GCC (above version 4), and Microsoft Visual C++ (abover version 2010), may
+    automatically generate SSE codes from C/C++ codes written in restricted ways.</p>
+  </section>
+ </conbody>
+</concept>

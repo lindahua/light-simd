@@ -27,15 +27,15 @@
             <toc/>
         </booklists>
     </frontmatter>
-    <chapter navtitle="Basics">
-        <topicref href="overview.dita">
-            <topicref href="what_is_simd.dita"/>
-            <topicref href="main_features.dita"/>
-            <topicref href="write_simd_codes.dita"/>
+    <chapter navtitle="Basics" href="intro/overview.dita">
+        <topicref href="intro/simd.dita" collection-type="unordered">
+            <topicref href="intro/sse.dita"/>
         </topicref>
+        <topicref href="intro/write_simd_codes.dita"/>
     </chapter>
-    <appendix navtitle="Function Lists" href="funrefs/fun_list.dita">
-        <topicref href="funrefs/exp.dita"/>
+    <appendix href="funrefs/cate_mathfun_list.dita"/>
+    <appendix href="funrefs/alpha_mathfun_list.dita" collection-type="sequence">
         <topicref href="funrefs/sqrt.dita"/>
+        <topicref href="funrefs/exp.dita"/>
     </appendix>
 </bookmap>
