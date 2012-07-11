@@ -50,6 +50,7 @@ add_executable(bench_sse_reduce bench_sse_reduce.cpp)
 add_executable(bench_sse_vecs bench_sse_vecs.cpp)
 add_executable(bench_sse_mats bench_sse_mats.cpp)
 add_executable(bench_sse_mm   bench_sse_mm.cpp)
+add_executable(bench_sse_sol bench_sse_sol.cpp)
 
 add_executable(bench_sse_math_svml bench_sse_math.cpp)
 
@@ -65,6 +66,7 @@ set(ALL_EXECUTABLES
     bench_sse_vecs
     bench_sse_mats
     bench_sse_mm
+    bench_sse_sol
     bench_sse_math_svml)
 
 set_target_properties(${ALL_EXECUTABLES}

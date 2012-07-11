@@ -170,62 +170,6 @@ struct mtimes_op
 };
 
 
-template<typename T, int N>
-struct inv_op
-{
-	const char *name() const { return "inv-copy"; }
-
-	int scalar_ops() const
-	{
-		return 4 * N * N * N;
-	}
-
-	LSIMD_ENSURE_INLINE
-	void run()
-	{
-		const T *src = data_s<T>::src();
-		T *dst = data_s<T>::dst();
-
-		simd_mat<T, N, N, sse_kind> a, b;
-
-		for (unsigned i = 0; i < num_mats; ++i)
-		{
-			a.load(src + i * step_size, aligned_t());
-			inv_and_det(a, b);
-			b.store(dst + i * step_size, aligned_t());
-		}
-	}
-};
-
-
-template<typename T, int N>
-struct solve_op
-{
-	const char *name() const { return "solve-copy"; }
-
-	int scalar_ops() const { return 4 * N * N * N; }
-
-	LSIMD_ENSURE_INLINE
-	void run()
-	{
-		const T *src = data_s<T>::src();
-		T *dst = data_s<T>::dst();
-
-		simd_mat<T, N, N, sse_kind> a;
-		a.load(src, aligned_t());
-
-		for (unsigned i = 0; i < num_mats; ++i)
-		{
-			simd_vec<T, N, sse_kind> v;
-			v.load(src + i * step_size, aligned_t());
-
-			solve(a, v).store(dst + i * step_size, aligned_t());
-		}
-	}
-};
-
-
-
 template<template<typename U, int M, int N> class OpT>
 void do_bench()
 {
@@ -301,9 +245,6 @@ int main(int argc, char *argv[])
 	do_bench<addip_op>();
 	do_bench<transcp_op>();
 	do_bench<mtimes_op>();
-
-	do_bench1<inv_op>();
-	do_bench1<solve_op>();
 }
 
 

@@ -205,24 +205,19 @@ namespace lsimd { namespace sse {
 	LSIMD_ENSURE_INLINE
 	inline f64 det(const smat_core<f64, 3, 3>& a)
 	{
-		// generate product terms
+		sse_f64pk c2r = a.col2.m_pk0.swizzle<1,0>();
+		sse_f64pk c1r = a.col1.m_pk0.swizzle<1,0>();
 
-		sse_f64pk c = a.col2.m_pk0.swizzle<1,0>();
+		sse_f64pk m0 = a.col1.m_pk0 * c2r;  // (m20+, m20-)
+		sse_f64pk m1 = a.col0.m_pk0 * c2r; 	// (m21+, m21-)
+		sse_f64pk m2 = a.col0.m_pk0 * c1r; 	// (m22+, m22-)
 
-		sse_f64pk u1 = a.col0.m_pk0 * a.col1.m_pk0.swizzle<1,0>();
-		sse_f64pk u2 = a.col0.m_pk0 * c;
-		sse_f64pk u3 = a.col1.m_pk0 * c;
+		m0 *= a.col0.m_pk1.bsx<0>(); 	// (m20+ * a20, m20- * a20)
+		m1 *= a.col1.m_pk1.bsx<0>(); 	// (m21+ * a20, m20- * a20)
+		m2 *= a.col2.m_pk1.bsx<0>(); 	// (m22+ * a22, m20- * a22)
 
-		u1 = u1 * a.col2.m_pk1.bsx<0>();
-		u2 = u2 * a.col1.m_pk1.bsx<0>();
-		u3 = u3 * a.col0.m_pk1.bsx<0>();
-
-		// aggregate the terms
-
-		u1 = u1 - u2;
-		u1 = u1 + u3;
-
-		return hdiff(u1).to_scalar();
+		sse_f64pk r = m0 - m1 + m2;
+		return hdiff(r).to_scalar();
 	}
 
 
