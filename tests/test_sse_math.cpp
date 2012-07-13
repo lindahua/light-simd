@@ -185,7 +185,7 @@ struct tan_s
 	}
 };
 
-
+#ifdef LSIMD_HAS_SSE_ANTI_TRIGONO
 
 template<typename T>
 struct asin_s
@@ -256,6 +256,9 @@ struct atan2_s
 	}
 };
 
+#endif
+
+#ifdef LSIMD_HAS_SSE_HYPERBOLIC
 
 template<typename T>
 struct sinh_s
@@ -307,6 +310,7 @@ struct tanh_s
 	}
 };
 
+#endif
 
 
 
@@ -328,6 +332,9 @@ struct cbrt_s
 	}
 };
 
+
+#ifdef LSIMD_HAS_SSE_HYPOT
+
 template<typename T>
 struct hypot_s
 {
@@ -347,6 +354,7 @@ struct hypot_s
 	}
 };
 
+#endif
 
 template<typename T>
 struct exp10_s
@@ -429,6 +437,7 @@ struct log1p_s
 	}
 };
 
+#ifdef LSIMD_HAS_SSE_ANTI_HYPERBOLIC
 
 template<typename T>
 struct asinh_s
@@ -479,6 +488,9 @@ struct atanh_s
 		return atanh(x);
 	}
 };
+
+#endif
+
 
 #ifdef LSIMD_HAS_SSE_ERF
 
@@ -536,7 +548,10 @@ bool test_all()
 #ifdef LSIMD_HAS_C99_SCALAR_MATH
 
 	passed &= test_accuracy_u<T, cbrt_s>();
+
+#ifdef LSIMD_HAS_SSE_HYPOT
 	passed &= test_accuracy_b<T, hypot_s>();
+#endif
 
 	passed &= test_accuracy_u<T, exp2_s>();
 	passed &= test_accuracy_u<T, exp10_s>();
@@ -556,10 +571,14 @@ bool test_all()
 	passed &= test_accuracy_u<T, cos_s>();
 	passed &= test_accuracy_u<T, tan_s>();
 
+#ifdef LSIMD_HAS_SSE_ANTI_TRIGONO
+
 	passed &= test_accuracy_u<T, asin_s>();
 	passed &= test_accuracy_u<T, acos_s>();
 	passed &= test_accuracy_u<T, atan_s>();
 	passed &= test_accuracy_b<T, atan2_s>();
+
+#endif
 
 	std::printf("\n");
 
@@ -568,13 +587,17 @@ bool test_all()
 
 #ifdef LSIMD_HAS_C99_SCALAR_MATH
 
+#ifdef LSIMD_HAS_SSE_HYPERBOLIC
 	passed &= test_accuracy_u<T, sinh_s>();
 	passed &= test_accuracy_u<T, cosh_s>();
 	passed &= test_accuracy_u<T, tanh_s>();
+#endif
 
+#ifdef LSIMD_HAS_SSE_ANTI_HYPERBOLIC
 	passed &= test_accuracy_u<T, asinh_s>();
 	passed &= test_accuracy_u<T, acosh_s>();
 	passed &= test_accuracy_u<T, atanh_s>();
+#endif
 
 #endif
 

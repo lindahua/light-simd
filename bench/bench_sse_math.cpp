@@ -75,6 +75,8 @@ struct cbrt_op
 	}
 };
 
+#ifdef LSIMD_HAS_SSE_HYPOT
+
 template<typename T>
 struct hypot_op
 {
@@ -91,6 +93,7 @@ struct hypot_op
 	}
 };
 
+#endif
 
 template<typename T>
 struct exp_op
@@ -269,6 +272,8 @@ struct tan_op
 	}
 };
 
+#ifdef LSIMD_HAS_SSE_ANTI_TRIGONO
+
 template<typename T>
 struct asin_op
 {
@@ -333,6 +338,10 @@ struct atan2_op
 	}
 };
 
+#endif
+
+
+#ifdef LSIMD_HAS_SSE_HYPERBOLIC
 
 template<typename T>
 struct sinh_op
@@ -382,6 +391,11 @@ struct tanh_op
 	}
 };
 
+#endif
+
+
+#ifdef LSIMD_HAS_SSE_ANTI_HYPERBOLIC
+
 template<typename T>
 struct asinh_op
 {
@@ -429,6 +443,9 @@ struct atanh_op
 		force_to_reg(r);
 	}
 };
+
+#endif
+
 
 #ifdef LSIMD_HAS_SSE_ERF
 
@@ -485,7 +502,9 @@ int main(int argc, char *argv[])
 
 	bench<f32, pow_op>   (rt_f1 / 10, af);
 	bench<f32, cbrt_op>  (rt_f1, af);
+#ifdef LSIMD_HAS_SSE_HYPOT
 	bench<f32, hypot_op> (rt_f1, af);
+#endif
 
 	bench<f32, exp_op>   (rt_f1, af);
 	bench<f32, exp2_op>  (rt_f1, af);
@@ -502,21 +521,29 @@ int main(int argc, char *argv[])
 	bench<f32, cos_op>   (rt_f1, af);
 	bench<f32, tan_op>   (rt_f1, af);
 
+#ifdef LSIMD_HAS_SSE_ANTI_TRIGONO
 	bench<f32, asin_op>  (rt_f1, af);
 	bench<f32, acos_op>  (rt_f1, af);
 	bench<f32, atan_op>  (rt_f1, af);
 	bench<f32, atan2_op> (rt_f1, af);
+#endif
 
+#ifdef LSIMD_HAS_SSE_HYPERBOLIC
 	bench<f32, sinh_op>  (rt_f1, af);
 	bench<f32, cosh_op>  (rt_f1, af);
 	bench<f32, tanh_op>  (rt_f1, af);
+#endif
 
+#ifdef LSIMD_HAS_SSE_ANTI_HYPERBOLIC
 	bench<f32, asinh_op> (rt_f1 / 2, af);
 	bench<f32, acosh_op> (rt_f1, af);
 	bench<f32, atanh_op> (rt_f1, af);
+#endif
 
+#ifdef LSIMD_HAS_SSE_ERF
 	bench<f32, erf_op>   (rt_f1 / 2, af);
 	bench<f32, erfc_op>  (rt_f1 / 2, af);
+#endif
 
 	std::printf("\n");
 
@@ -528,7 +555,9 @@ int main(int argc, char *argv[])
 
 	bench<f64, pow_op>   (rt_d1 / 5, ad);
 	bench<f64, cbrt_op>  (rt_d1, ad);
+#ifdef LSIMD_HAS_SSE_HYPOT
 	bench<f64, hypot_op> (rt_d1, ad);
+#endif
 
 	bench<f64, exp_op>   (rt_d1, ad);
 	bench<f64, exp2_op>  (rt_d1, ad);
@@ -545,21 +574,29 @@ int main(int argc, char *argv[])
 	bench<f64, cos_op>   (rt_d1, ad);
 	bench<f64, tan_op>   (rt_d1, ad);
 
+#ifdef LSIMD_HAS_SSE_ANTI_TRIGONO
 	bench<f64, asin_op>  (rt_d1, ad);
 	bench<f64, acos_op>  (rt_d1, ad);
 	bench<f64, atan_op>  (rt_d1, ad);
 	bench<f64, atan2_op> (rt_d1, ad);
+#endif
 
+#ifdef LSIMD_HAS_SSE_HYPERBOLIC
 	bench<f64, sinh_op>  (rt_d1, ad);
 	bench<f64, cosh_op>  (rt_d1, ad);
 	bench<f64, tanh_op>  (rt_d1, ad);
+#endif
 
+#ifdef LSIMD_HAS_SSE_ANTI_HYPERBOLIC
 	bench<f64, asinh_op> (rt_d1 / 2, ad);
 	bench<f64, acosh_op> (rt_d1, ad);
 	bench<f64, atanh_op> (rt_d1, ad);
+#endif
 
+#ifdef LSIMD_HAS_SSE_ERF
 	bench<f64, erf_op>   (rt_d1 / 2, ad);
 	bench<f64, erfc_op>  (rt_d1 / 5, ad);
+#endif
 
 	std::printf("\n");
 

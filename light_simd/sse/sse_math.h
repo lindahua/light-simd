@@ -21,6 +21,11 @@
 #define LSIMD_USE_MATH_FUNCTIONS
 #endif
 
+#if defined(LSIMD_USE_INTEL_SVML) && defined(LSIMD_USE_AMD_LIBM)
+#error SVML and LIBM cannot be used simultaneously.
+#endif
+
+
 #ifdef LSIMD_USE_INTEL_SVML
 
 // External function prototypes
@@ -39,6 +44,10 @@
 #define LSIMD_SSE_F( name ) SVML_SSE_F( name )
 #define LSIMD_SSE_D( name ) SVML_SSE_D( name )
 
+#define LSIMD_HAS_SSE_ANTI_TRIGONO
+#define LSIMD_HAS_SSE_HYPERBOLIC
+#define LSIMD_HAS_SSE_ANTI_HYPERBOLIC
+#define LSIMD_HAS_SSE_HYPOT
 #define LSIMD_HAS_SSE_ERF
 
 extern "C"
@@ -84,15 +93,15 @@ extern "C"
 #ifdef LSIMD_USE_AMD_LIBM
 
 #define LIBM_SSE_F( name ) amd_vrs4_##name##f
-#define LIBM_SSE_F( name ) amd_vrd2_##name
+#define LIBM_SSE_D( name ) amd_vrd2_##name
 
 #define DECLARE_LIBM_SSE_EXTERN1( name ) \
-	__m128  SVML_SSE_F(name)( __m128 ); \
-	__m128d SVML_SSE_D(name)( __m128d );
+	__m128  LIBM_SSE_F(name)( __m128 ); \
+	__m128d LIBM_SSE_D(name)( __m128d );
 
 #define DECLARE_LIBM_SSE_EXTERN2( name ) \
-	__m128  SVML_SSE_F(name)( __m128,  __m128  ); \
-	__m128d SVML_SSE_D(name)( __m128d, __m128d );
+	__m128  LIBM_SSE_F(name)( __m128,  __m128  ); \
+	__m128d LIBM_SSE_D(name)( __m128d, __m128d );
 
 #define LSIMD_SSE_F( name ) LIBM_SSE_F( name )
 #define LSIMD_SSE_D( name ) LIBM_SSE_D( name )
@@ -101,7 +110,6 @@ extern "C"
 {
 	DECLARE_LIBM_SSE_EXTERN1( cbrt )
 	DECLARE_LIBM_SSE_EXTERN2( pow )
-	DECLARE_LIBM_SSE_EXTERN2( hypot )
 
 	DECLARE_LIBM_SSE_EXTERN1( exp )
 	DECLARE_LIBM_SSE_EXTERN1( exp2 )
@@ -116,22 +124,6 @@ extern "C"
 	DECLARE_LIBM_SSE_EXTERN1( sin )
 	DECLARE_LIBM_SSE_EXTERN1( cos )
 	DECLARE_LIBM_SSE_EXTERN1( tan )
-
-	DECLARE_LIBM_SSE_EXTERN1( asin )
-	DECLARE_LIBM_SSE_EXTERN1( acos )
-	DECLARE_LIBM_SSE_EXTERN1( atan )
-	DECLARE_LIBM_SSE_EXTERN2( atan2 )
-
-	DECLARE_LIBM_SSE_EXTERN1( sinh )
-	DECLARE_LIBM_SSE_EXTERN1( cosh )
-	DECLARE_LIBM_SSE_EXTERN1( tanh )
-
-	DECLARE_LIBM_SSE_EXTERN1( asinh )
-	DECLARE_LIBM_SSE_EXTERN1( acosh )
-	DECLARE_LIBM_SSE_EXTERN1( atanh )
-
-	DECLARE_LIBM_SSE_EXTERN1( erf )
-	DECLARE_LIBM_SSE_EXTERN1( erfc )
 }
 
 #endif
@@ -164,6 +156,8 @@ namespace lsimd
 		return LSIMD_SSE_D(pow)(x.v, e.v);
 	}
 
+#ifdef LSIMD_HAS_SSE_HYPOT
+
 	LSIMD_ENSURE_INLINE sse_f32pk hypot( const sse_f32pk& x, const sse_f32pk& y )
 	{
 		return LSIMD_SSE_F(hypot)(x.v, y.v);
@@ -173,6 +167,8 @@ namespace lsimd
 	{
 		return LSIMD_SSE_D(hypot)(x.v, y.v);
 	}
+
+#endif
 
 	LSIMD_ENSURE_INLINE sse_f32pk exp( const sse_f32pk& x )
 	{
@@ -284,6 +280,8 @@ namespace lsimd
 		return LSIMD_SSE_D(tan)(x.v);
 	}
 
+#ifdef LSIMD_HAS_SSE_ANTI_TRIGONO
+
 	LSIMD_ENSURE_INLINE sse_f32pk asin( const sse_f32pk& x )
 	{
 		return LSIMD_SSE_F(asin)(x.v);
@@ -324,6 +322,11 @@ namespace lsimd
 		return LSIMD_SSE_D(atan2)(x.v, y.v);
 	}
 
+#endif
+
+
+#ifdef LSIMD_HAS_SSE_HYPERBOLIC
+
 	LSIMD_ENSURE_INLINE sse_f32pk sinh( const sse_f32pk& x )
 	{
 		return LSIMD_SSE_F(sinh)(x.v);
@@ -353,6 +356,10 @@ namespace lsimd
 	{
 		return LSIMD_SSE_D(tanh)(x.v);
 	}
+#endif
+
+
+#ifdef LSIMD_HAS_SSE_ANTI_HYPERBOLIC
 
 	LSIMD_ENSURE_INLINE sse_f32pk asinh( const sse_f32pk& x )
 	{
@@ -383,6 +390,9 @@ namespace lsimd
 	{
 		return LSIMD_SSE_D(atanh)(x.v);
 	}
+
+#endif
+
 
 #ifdef LSIMD_HAS_SSE_ERF
 

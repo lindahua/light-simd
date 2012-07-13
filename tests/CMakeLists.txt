@@ -33,21 +33,42 @@ set(CMAKE_CXX_FLAGS "${TEST_CXX_FLAGS}")
 
 set(SVML_PATH "$ENV{ICC_LIBPATH}")
 
-if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-	find_library(SVML svml_disp
-		HINTS ${SVML_PATH})
-	find_library(LIBIRC libirc 
-		HINTS ${SVML_PATH})
-	
-else (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-	find_library(SVML svml 
-		HINTS ${SVML_PATH})
+if (SVML_PATH)
 
-endif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    	find_library(SVML svml_disp
+    		HINTS ${SVML_PATH})
+    	find_library(LIBIRC libirc 
+    		HINTS ${SVML_PATH})
+    	
+    else (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    	find_library(SVML svml 
+    		HINTS ${SVML_PATH})
+    
+    endif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    
+    if (SVML_NOT_FOUND)
+        message(SEND_ERROR "Intel SVML (Short Vector Math Library) is NOT found.")
+    endif (SVML_NOT_FOUND)
 
-if (SVML_NOT_FOUND)
-message(SEND_ERROR "Intel SVML (Short Vector Math Library) is NOT found.")
-endif (SVML_NOT_FOUND)
+endif (SVML_PATH)
+
+
+set(LIBM_HOME "$ENV{AMDLIBM_HOME}")
+
+if ( LIBM_HOME )
+
+    set(AMDLIBM_PATH "$ENV{AMDLIBM_HOME}/lib/dynamic")
+
+    find_library(AMDLIBM amdlibm
+        HINTS ${AMDLIBM_PATH})
+    
+    if (AMDLIBM_NOT_FOUND)
+        message(SEND_ERROR "AMD LibM is NOT found.")
+    endif (AMDLIBM_NOT_FOUND)
+
+endif ( LIBM_HOME )
+
 
 
 # Header file groups (to be used as dependencies)
@@ -114,22 +135,48 @@ add_executable(test_sse_mats ${SSE_LINALG_DEP_HS} test_sse_mats.cpp)
 add_executable(test_sse_mm   ${SSE_LINALG_DEP_HS} test_sse_mm.cpp)
 add_executable(test_sse_sol  ${SSE_LINALG_DEP_HS} test_sse_sol.cpp)
 
+if (SVML_PATH)
 add_executable(test_sse_math_svml ${SSE_MATH_DEP_HS} test_sse_math.cpp)
+endif (SVML_PATH)
+
+if (LIBM_HOME)
+add_executable(test_sse_math_libm ${SSE_MATH_DEP_HS} test_sse_math.cpp)
+endif (LIBM_HOME)
 
 target_link_libraries(test_sse_packs test_main)
 target_link_libraries(test_sse_arith test_main)
 target_link_libraries(test_sse_logical test_main)
 
+if (SVML_PATH)
 if (MSVC)
 target_link_libraries(test_sse_math_svml test_main ${SVML} ${LIBIRC})
 else (MSVC)
 target_link_libraries(test_sse_math_svml test_main ${SVML})
 endif (MSVC)
+endif (SVML_PATH)
+
+if (LIBM_HOME)
+target_link_libraries(test_sse_math_libm test_main ${AMDLIBM})
+endif (LIBM_HOME)
 
 target_link_libraries(test_sse_vecs test_main)
 target_link_libraries(test_sse_mats test_main)
 target_link_libraries(test_sse_mm test_main)
 target_link_libraries(test_sse_sol test_main)
+
+if (SVML_PATH)
+if (LIBM_HOME)
+    set(MATH_EXECS test_sse_math_svml test_sse_math_libm)
+else (LIBM_HOME)
+    set(MATH_EXECS test_sse_math_svml)
+endif (LIBM_HOME)
+else (SVML_PATH)
+if (LIBM_HOME)
+    set(MATH_EXECS test_sse_math_libm)
+else (LIBM_HOME)
+    set(MATH_EXECS )
+endif (LIBM_HOME)
+endif (SVML_PATH)
 
 set(ALL_EXECUTABLES 
     test_sse_packs
@@ -139,16 +186,25 @@ set(ALL_EXECUTABLES
     test_sse_mats
     test_sse_mm
     test_sse_sol
-    test_sse_math_svml)
+    ${MATH_EXECS})
     
 set_target_properties(${ALL_EXECUTABLES}
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "bin")    
 
+if (SVML_PATH)
 set_target_properties(test_sse_math_svml
 	PROPERTIES
 	COMPILE_FLAGS "-DLSIMD_USE_INTEL_SVML"
 )
+endif (SVML_PATH)
+
+if (LIBM_HOME)
+set_target_properties(test_sse_math_libm
+    PROPERTIES
+    COMPILE_FLAGS "-DLSIMD_USE_AMD_LIBM"
+)
+endif (LIBM_HOME)
 
 # Add Tests
 
@@ -161,8 +217,12 @@ add_test(NAME sse_mats COMMAND test_sse_mats)
 add_test(NAME sse_mm   COMMAND test_sse_mm)
 add_test(NAME sse_sol  COMMAND test_sse_sol)
 
+if (SVML_PATH)
 add_test(NAME sse_math_svml COMMAND test_sse_math_svml)
+endif (SVML_PATH)
 
-
+if (LIBM_HOME)
+add_test(NAME sse_math_libm COMMAND test_sse_math_libm)
+endif (LIBM_HOME)
 
 
