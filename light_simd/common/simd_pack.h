@@ -112,13 +112,13 @@ namespace lsimd
 		template<int I>
 		LSIMD_ENSURE_INLINE void partial_load(const T *a)
 		{
-			impl.partial_load<I>(a);
+			impl.template partial_load<I>(a);
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE void partial_store(T *a) const
 		{
-			impl.partial_store<I>(a);
+			impl.template partial_store<I>(a);
 		}
 
 
@@ -132,25 +132,25 @@ namespace lsimd
 		template<int I>
 		LSIMD_ENSURE_INLINE T extract() const
 		{
-			return impl.extract<I>();
+			return impl.template extract<I>();
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE simd_pack bsx() const
 		{
-			return impl.bsx<I>();
+			return impl.template bsx<I>();
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE simd_pack shift_front() const
 		{
-			return impl.shift_front<I>();
+			return impl.template shift_front<I>();
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE simd_pack shift_back() const
 		{
-			return impl.shift_back<I>();
+			return impl.template shift_back<I>();
 		}
 
 		// statistics
@@ -163,7 +163,7 @@ namespace lsimd
 		template<int I>
 		LSIMD_ENSURE_INLINE T partial_sum() const
 		{
-			return impl.partial_sum<I>();
+			return impl.template partial_sum<I>();
 		}
 
 		LSIMD_ENSURE_INLINE T (max)() const
@@ -174,7 +174,7 @@ namespace lsimd
 		template<int I>
 		LSIMD_ENSURE_INLINE T partial_max() const
 		{
-			return impl.partial_max<I>();
+			return impl.template partial_max<I>();
 		}
 
 		LSIMD_ENSURE_INLINE T (min)() const
@@ -185,7 +185,7 @@ namespace lsimd
 		template<int I>
 		LSIMD_ENSURE_INLINE T partial_min() const
 		{
-			return impl.partial_min<I>();
+			return impl.template partial_min<I>();
 		}
 
 		// constants
