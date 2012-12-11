@@ -8,6 +8,7 @@
 
 
 #include "bench_aux.h"
+#include <light_simd/sse/sse_arith.h>
 
 using namespace lsimd;
 
@@ -110,7 +111,7 @@ struct approx_rcp_op
 	LSIMD_ENSURE_INLINE
 	static void run(const simd_pack<T, sse_kind>& x)
 	{
-		simd_pack<T, sse_kind> r = approx_rcp(x.impl);
+		simd_pack<T, sse_kind> r = approx_rcp(x);
 		force_to_reg(r);
 	}
 };
@@ -128,7 +129,7 @@ struct approx_rsqrt_op
 	LSIMD_ENSURE_INLINE
 	static void run(const simd_pack<T, sse_kind>& x)
 	{
-		simd_pack<T, sse_kind> r =  approx_rsqrt(x.impl);
+		simd_pack<T, sse_kind> r =  approx_rsqrt(x);
 		force_to_reg(r);
 	}
 };
@@ -182,7 +183,7 @@ struct floor2_op
 	LSIMD_ENSURE_INLINE
 	static void run(const simd_pack<T, sse_kind>& x)
 	{
-		simd_pack<T, sse_kind> r = floor_sse2(x.impl);
+		simd_pack<T, sse_kind> r = floor_sse2(x);
 		force_to_reg(r);
 	}
 };
@@ -200,7 +201,7 @@ struct ceil2_op
 	LSIMD_ENSURE_INLINE
 	static void run(const simd_pack<T, sse_kind>& x)
 	{
-		simd_pack<T, sse_kind> r = ceil_sse2(x.impl);
+		simd_pack<T, sse_kind> r = ceil_sse2(x);
 		force_to_reg(r);
 	}
 };

@@ -66,11 +66,6 @@ endif ( LIBM_HOME )
 add_executable(bench_sse_arith bench_sse_arith.cpp)
 add_executable(bench_sse_reduce bench_sse_reduce.cpp)
 
-add_executable(bench_sse_vecs bench_sse_vecs.cpp)
-add_executable(bench_sse_mats bench_sse_mats.cpp)
-add_executable(bench_sse_mm   bench_sse_mm.cpp)
-add_executable(bench_sse_sol bench_sse_sol.cpp)
-
 if (SVML_PATH)
 add_executable(bench_sse_math_svml bench_sse_math.cpp)
 endif (SVML_PATH)
@@ -108,10 +103,6 @@ endif (SVML_PATH)
 set(ALL_EXECUTABLES
     bench_sse_arith
     bench_sse_reduce
-    bench_sse_vecs
-    bench_sse_mats
-    bench_sse_mm
-    bench_sse_sol
     ${MATH_EXECS})
 
 set_target_properties(${ALL_EXECUTABLES}

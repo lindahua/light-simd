@@ -8,6 +8,7 @@
 
 
 #include "test_aux.h"
+#include <light_simd/sse/sse_logical.h>
 
 #include <cstring>
 
@@ -42,11 +43,11 @@ inline bool is_mask_eq(T v, bool b)
 template<typename T>
 inline bool is_mask_eq(const simd_pack<T, sse_kind>&  p, const bool *ba)
 {
-	const unsigned w = simd<T, sse_kind>::pack_width;
+	const unsigned w = simd_traits<T, sse_kind>::pack_width;
 
 	for (unsigned i = 0; i < w; ++i)
 	{
-		if (!is_mask_eq(p.impl.e[i], ba[i])) return false;
+		if (!is_mask_eq(p.e[i], ba[i])) return false;
 	}
 	return true;
 }
@@ -326,7 +327,7 @@ GCASE( cond_select_sse2 )
 	simd_pack<T, sse_kind> px(x, aligned_t());
 	simd_pack<T, sse_kind> py(y, aligned_t());
 
-	simd_pack<T, sse_kind> pr( cond_sse2(pm.impl, px.impl, py.impl) );
+	simd_pack<T, sse_kind> pr( cond_sse2(pm, px, py) );
 	ASSERT_SIMD_EQ( pr, r );
 }
 

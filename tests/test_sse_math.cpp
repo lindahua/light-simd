@@ -8,6 +8,7 @@
 
 #include "test_aux.h"
 #include <light_test/color_printf.h>
+#include <light_simd/sse/sse_math.h>
 
 #include <cmath>
 

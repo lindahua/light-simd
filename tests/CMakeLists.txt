@@ -77,18 +77,8 @@ set(INC ../light_simd)
 
 set(COMMON_BASIC_HS 
     ${INC}/arch.h
-    ${INC}/common/common_base.h 
-    ${INC}/common/simd_pack.h
-    ${INC}/common/simd_arith.h
-    ${INC}/common/simd_logical.h)
-    
-set(COMMON_MATH_HS
-    ${INC}/common/simd_math.h)
-    
-set(COMMON_LINALG_HS
-    ${INC}/common/simd_vec.h
-    ${INC}/common/simd_mat.h)
-
+    ${INC}/common/common_base.h)
+        
 set(SSE_BASIC_HS 
     ${INC}/sse/sse_base.h 
     ${INC}/sse/sse_pack.h 
@@ -99,28 +89,14 @@ set(SSE_BASIC_HS
 set(SSE_MATH_HS 
     ${INC}/sse/sse_math.h)
 
-set(SSE_LINALG_HS 
-    ${INC}/sse/sse_vec.h 
-    ${INC}/sse/sse_mat.h
-    ${INC}/sse/details/sse_mat_bits.h
-    ${INC}/sse/details/sse_mat_comp_bits.h
-    ${INC}/sse/details/sse_mat_matmul_bits.h
-    ${INC}/sse/details/sse_mat_sol_bits.h)
-    
 set(SSE_BASIC_DEP_HS
     ${COMMON_BASIC_HS}
     ${SSE_BASIC_HS})
     
 set(SSE_MATH_DEP_HS
     ${SSE_BASIC_DEP_HS}
-	${COMMON_MATH_HS}
     ${SSE_MATH_HS})
-    
-set(SSE_LINALG_DEP_HS
-    ${SSE_BASIC_DEP_HS}
-	${COMMON_LINALG_HS}
-    ${SSE_LINALG_HS})
-    
+        
 
 # Executables
 
@@ -129,11 +105,6 @@ add_library(test_main STATIC test_main.cpp)
 add_executable(test_sse_packs ${SSE_BASIC_DEP_HS} test_sse_packs.cpp)
 add_executable(test_sse_arith ${SSE_BASIC_DEP_HS} test_sse_arith.cpp)
 add_executable(test_sse_logical ${SSE_BASIC_DEP_HS} test_sse_logical.cpp)
-
-add_executable(test_sse_vecs ${SSE_LINALG_DEP_HS} test_sse_vecs.cpp)
-add_executable(test_sse_mats ${SSE_LINALG_DEP_HS} test_sse_mats.cpp)
-add_executable(test_sse_mm   ${SSE_LINALG_DEP_HS} test_sse_mm.cpp)
-add_executable(test_sse_sol  ${SSE_LINALG_DEP_HS} test_sse_sol.cpp)
 
 if (SVML_PATH)
 add_executable(test_sse_math_svml ${SSE_MATH_DEP_HS} test_sse_math.cpp)
@@ -159,11 +130,6 @@ if (LIBM_HOME)
 target_link_libraries(test_sse_math_libm test_main ${AMDLIBM})
 endif (LIBM_HOME)
 
-target_link_libraries(test_sse_vecs test_main)
-target_link_libraries(test_sse_mats test_main)
-target_link_libraries(test_sse_mm test_main)
-target_link_libraries(test_sse_sol test_main)
-
 if (SVML_PATH)
 if (LIBM_HOME)
     set(MATH_EXECS test_sse_math_svml test_sse_math_libm)
@@ -182,10 +148,6 @@ set(ALL_EXECUTABLES
     test_sse_packs
     test_sse_arith
     test_sse_logical
-    test_sse_vecs
-    test_sse_mats
-    test_sse_mm
-    test_sse_sol
     ${MATH_EXECS})
     
 set_target_properties(${ALL_EXECUTABLES}
@@ -211,11 +173,6 @@ endif (LIBM_HOME)
 add_test(NAME sse_packs COMMAND test_sse_packs)
 add_test(NAME sse_arith COMMAND test_sse_arith)
 add_test(NAME sse_logical COMMAND test_sse_logical)
-
-add_test(NAME sse_vecs COMMAND test_sse_vecs)
-add_test(NAME sse_mats COMMAND test_sse_mats)
-add_test(NAME sse_mm   COMMAND test_sse_mm)
-add_test(NAME sse_sol  COMMAND test_sse_sol)
 
 if (SVML_PATH)
 add_test(NAME sse_math_svml COMMAND test_sse_math_svml)

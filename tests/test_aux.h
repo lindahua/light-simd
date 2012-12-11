@@ -18,7 +18,7 @@
 #include <cstring>
 #include <cmath>
 
-#include <light_simd/simd.h>
+#include <light_simd/common/common_base.h>
 #include <light_test/tests.h>
 
 
@@ -155,9 +155,9 @@ namespace lsimd
 	unsigned int eval_approx_ulp(unsigned n, const T lb_a, const T ub_a)
 	{
 		unsigned int max_ulp = 0;
-		const unsigned w = simd<T, Kind>::pack_width;
-		LSIMD_ALIGN_SSE T src[w];
-		LSIMD_ALIGN_SSE T dst[w];
+		const unsigned w = simd_traits<T, Kind>::pack_width;
+		LSIMD_ALIGN(32) T src[w];
+		LSIMD_ALIGN(32) T dst[w];
 
 		for (unsigned k = 0; k < n; ++k)
 		{
@@ -170,7 +170,7 @@ namespace lsimd
 
 			a.load(src, aligned_t());
 
-			LSIMD_ALIGN_SSE T r0[w];
+			LSIMD_ALIGN(32) T r0[w];
 
 			for (unsigned i = 0; i < w; ++i)
 			{
@@ -197,10 +197,10 @@ namespace lsimd
 			const T lb_b, const T ub_b)
 	{
 		unsigned int max_ulp = 0;
-		const unsigned w = simd<T, Kind>::pack_width;
-		LSIMD_ALIGN_SSE T sa[w];
-		LSIMD_ALIGN_SSE T sb[w];
-		LSIMD_ALIGN_SSE T dst[w];
+		const unsigned w = simd_traits<T, Kind>::pack_width;
+		LSIMD_ALIGN(32) T sa[w];
+		LSIMD_ALIGN(32) T sb[w];
+		LSIMD_ALIGN(32) T dst[w];
 
 		for (unsigned k = 0; k < n; ++k)
 		{
@@ -216,7 +216,7 @@ namespace lsimd
 			a.load(sa, aligned_t());
 			b.load(sb, aligned_t());
 
-			LSIMD_ALIGN_SSE T r0[w];
+			LSIMD_ALIGN(32) T r0[w];
 
 			for (unsigned i = 0; i < w; ++i)
 			{
@@ -247,7 +247,7 @@ namespace lsimd
 
 
 #define ASSERT_SIMD_EQ( v, r ) \
-	if ( !(v).impl.test_equal(r) ) throw ::ltest::assertion_failure(__FILE__, __LINE__, #v " == " #r)
+	if ( !(v).test_equal(r) ) throw ::ltest::assertion_failure(__FILE__, __LINE__, #v " == " #r)
 
 
 #define GCASE( tname ) \

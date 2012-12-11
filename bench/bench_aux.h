@@ -13,7 +13,7 @@
 #ifndef LSIMD_BENCH_AUX_H_
 #define LSIMD_BENCH_AUX_H_
 
-#include <light_simd/simd.h>
+#include <light_simd/common/common_base.h>
 #include <cmath>
 #include <cstdlib>
 
@@ -53,7 +53,7 @@ namespace lsimd
 	LSIMD_ENSURE_INLINE
 	inline void force_to_reg(const simd_pack<T, sse_kind>& x)
 	{
-		__asm__ volatile("" : : "x"(x.impl.v));
+		__asm__ volatile("" : : "x"(x.v));
 	}
 
 	LSIMD_ENSURE_INLINE
@@ -86,7 +86,7 @@ namespace lsimd
 	template<typename T, typename Kind, class Op, unsigned Len>
 	struct wrap_op
 	{
-		static const unsigned w = simd<T, Kind>::pack_width;
+		static const unsigned w = simd_traits<T, Kind>::pack_width;
 		const T *a;
 
 		wrap_op(const T *a_)
@@ -110,7 +110,7 @@ namespace lsimd
 	template<typename T, typename Kind, class Op, unsigned Len>
 	struct wrap_op2
 	{
-		static const unsigned w = simd<T, Kind>::pack_width;
+		static const unsigned w = simd_traits<T, Kind>::pack_width;
 		const T *a;
 		const T *b;
 

@@ -8,6 +8,7 @@
 
 
 #include "bench_aux.h"
+#include <light_simd/sse/sse_math.h>
 
 using namespace lsimd;
 
@@ -37,7 +38,7 @@ inline void bench(unsigned repeat_times, T *pa)
 	wrap_op<T, sse_kind, OpT<T>, arr_len> op1(pa);
 	uint64_t cs1 = tsc_bench(op1, warming_times, repeat_times);
 
-	report_bench(OpT<T>::name(), repeat_times, cs1, simd<T, sse_kind>::pack_width, 1);
+	report_bench(OpT<T>::name(), repeat_times, cs1, simd_traits<T, sse_kind>::pack_width, 1);
 }
 
 

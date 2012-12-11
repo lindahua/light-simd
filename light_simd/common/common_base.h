@@ -56,13 +56,14 @@ namespace lsimd
 	// SIMD kind tags
 
 	struct sse_kind { };
+	struct avx_kind { };
 
 	typedef sse_kind default_simd_kind;
 
 
 	// forward declarations
 
-	template<typename T, typename Kind> struct simd;
+	template<typename T, typename Kind> struct simd_traits;
 
 	template<typename T, typename Kind=default_simd_kind> struct simd_pack;
 

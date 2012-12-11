@@ -8,6 +8,7 @@
 
 
 #include "test_aux.h"
+#include <light_simd/sse/sse_pack.h>
 
 using namespace lsimd;
 using namespace ltest;
@@ -17,11 +18,6 @@ using namespace ltest;
 
 template struct lsimd::simd_pack<f32, sse_kind>;
 template struct lsimd::simd_pack<f64, sse_kind>;
-
-static_assert( simd<f32, sse_kind>::pack_width == 4, "Incorrect simd pack_width" );
-static_assert( simd<f64, sse_kind>::pack_width == 2, "Incorrect simd pack_width" );
-
-
 
 /************************************************
  *
@@ -57,7 +53,7 @@ GCASE( load )
 
 GCASE( store )
 {
-	const int w = (int)simd<T, sse_kind>::pack_width;
+	const int w = (int)simd_traits<T, sse_kind>::pack_width;
 
 	LSIMD_ALIGN_SSE T s[4] = {T(1), T(3), T(2), T(4)};
 	LSIMD_ALIGN_SSE T t[5];

@@ -9,6 +9,8 @@
 #include "test_aux.h"
 #include <light_test/color_printf.h>
 
+#include <light_simd/sse/sse_arith.h>
+
 using namespace lsimd;
 
 const int N = 100 * 1024;
@@ -295,7 +297,7 @@ struct rcp_a_ts
 
 	static simd_pack<T, sse_kind> eval_vector(const simd_pack<T, sse_kind> x)
 	{
-		return approx_rcp(x.impl);
+		return approx_rcp(x);
 	}
 };
 
@@ -312,7 +314,7 @@ struct rsqrt_a_ts
 
 	static simd_pack<T, sse_kind> eval_vector(const simd_pack<T, sse_kind> x)
 	{
-		return approx_rsqrt(x.impl);
+		return approx_rsqrt(x);
 	}
 };
 
@@ -378,7 +380,7 @@ struct floor2_ts
 
 	static simd_pack<T, sse_kind> eval_vector(const simd_pack<T, sse_kind> x)
 	{
-		return floor_sse2(x.impl);
+		return floor_sse2(x);
 	}
 };
 
@@ -394,7 +396,7 @@ struct ceil2_ts
 
 	static simd_pack<T, sse_kind> eval_vector(const simd_pack<T, sse_kind> x)
 	{
-		return ceil_sse2(x.impl);
+		return ceil_sse2(x);
 	}
 };
 

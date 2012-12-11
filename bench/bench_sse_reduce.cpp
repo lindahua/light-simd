@@ -8,6 +8,7 @@
 
 
 #include "bench_aux.h"
+#include <light_simd/sse/sse_pack.h>
 
 using namespace lsimd;
 
