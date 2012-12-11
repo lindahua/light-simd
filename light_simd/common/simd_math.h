@@ -20,14 +20,14 @@
 #define LSIMD_DEFINE_SIMD_MATH_FUNC1(fun) \
 	template<typename T, typename Kind> \
 	LSIMD_ENSURE_INLINE \
-	simd_pack<T, Kind> fun(const simd_pack<T, Kind>& x) \
+	inline simd_pack<T, Kind> fun(const simd_pack<T, Kind>& x) \
 	{ return fun(x.impl); }
 
 
 #define LSIMD_DEFINE_SIMD_MATH_FUNC2(fun) \
 	template<typename T, typename Kind> \
 	LSIMD_ENSURE_INLINE \
-	simd_pack<T, Kind> fun(const simd_pack<T, Kind>& x, const simd_pack<T, Kind>& y) \
+	inline simd_pack<T, Kind> fun(const simd_pack<T, Kind>& x, const simd_pack<T, Kind>& y) \
 	{ return fun(x.impl, y.impl); }
 
 

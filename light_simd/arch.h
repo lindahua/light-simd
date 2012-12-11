@@ -42,13 +42,10 @@
 		#define LSIMD_COMPILER LSIMD_GCC
 	#endif
 
+	#define LSIMD_HAS_C99_SCALAR_MATH
+
 #else
 	#error Light-SIMD can only be used with Microsoft Visual C++, GCC (G++), or clang (clang++).
-#endif
-
-
-#ifdef __GXX_EXPERIMENTAL_CXX0X__
-#define LSIMD_HAS_C99_SCALAR_MATH
 #endif
 
 
@@ -93,6 +90,10 @@
 
 #if defined(__SSE4_2__)
 #define LSIMD_HAS_SSE4_2
+#endif
+
+#if defined(__AVX__)
+#define LSIMD_HAS_AVX
 #endif
 
 #endif
