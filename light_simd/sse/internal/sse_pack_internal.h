@@ -30,6 +30,17 @@ namespace lsimd {  namespace sse_internal {
 	 ********************************************/
 
 	LSIMD_ENSURE_INLINE
+	inline __m128 partial_load(const f32 *x, int_<0>)
+	{
+		return _mm_setzero_ps();
+	}
+
+	LSIMD_ENSURE_INLINE
+	inline void partial_store(f32 *x, __m128 p, int_<0>)
+	{
+	}
+
+	LSIMD_ENSURE_INLINE
 	inline __m128 partial_load(const f32 *x, int_<1>)
 	{
 		return _mm_load_ss(x);
@@ -72,6 +83,30 @@ namespace lsimd {  namespace sse_internal {
 				_mm_store_ss(x+2, _mm_movehl_ps(p, p));
 	}
 
+	LSIMD_ENSURE_INLINE
+	inline __m128 partial_load(const f32 *x, int_<4>)
+	{
+		return _mm_loadu_ps(x);
+	}
+
+	LSIMD_ENSURE_INLINE
+	inline void partial_store(f32 *x, __m128 p, int_<4>)
+	{
+		_mm_storeu_ps(x, p);
+	}
+
+
+	LSIMD_ENSURE_INLINE
+	inline __m128d partial_load(const f64 *x, int_<0>)
+	{
+		return _mm_setzero_pd();
+	}
+
+	LSIMD_ENSURE_INLINE
+	inline void partial_store(f64 *x, __m128d p, int_<0>)
+	{
+	}
+
 
 	LSIMD_ENSURE_INLINE
 	inline __m128d partial_load(const f64 *x, int_<1>)
@@ -85,6 +120,18 @@ namespace lsimd {  namespace sse_internal {
 		_mm_store_sd(x, p);
 	}
 
+
+	LSIMD_ENSURE_INLINE
+	inline __m128d partial_load(const f64 *x, int_<2>)
+	{
+		return _mm_loadu_pd(x);
+	}
+
+	LSIMD_ENSURE_INLINE
+	inline void partial_store(f64 *x, __m128d p, int_<2>)
+	{
+		_mm_storeu_pd(x, p);
+	}
 
 
 	/********************************************

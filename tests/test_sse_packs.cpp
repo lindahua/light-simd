@@ -78,6 +78,10 @@ SCASE( partial_load, f32 )
 
 	simd_pack<f32, sse_kind> v;
 
+	v.partial_load(a, int_<0>());
+	f32 r0[4] = {0.f, 0.f, 0.f, 0.f};
+	ASSERT_SIMD_EQ(v, r0);
+
 	v.partial_load(a, int_<1>());
 	f32 r1[4] = {1.f, 0.f, 0.f, 0.f};
 	ASSERT_SIMD_EQ(v, r1);
@@ -89,6 +93,10 @@ SCASE( partial_load, f32 )
 	v.partial_load(a, int_<3>());
 	f32 r3[4] = {1.f, 2.f, 3.f, 0.f};
 	ASSERT_SIMD_EQ(v, r3);
+
+	v.partial_load(a, int_<4>());
+	f32 r4[4] = {1.f, 2.f, 3.f, 4.f};
+	ASSERT_SIMD_EQ(v, r4);
 }
 
 
@@ -98,9 +106,17 @@ SCASE( partial_load, f64 )
 
 	simd_pack<f64, sse_kind> v;
 
+	v.partial_load(a, int_<0>());
+	f64 r0[2] = {0.0, 0.0};
+	ASSERT_SIMD_EQ(v, r0);
+
 	v.partial_load(a, int_<1>());
 	f64 r1[2] = {1.0, 0.0};
 	ASSERT_SIMD_EQ(v, r1);
+
+	v.partial_load(a, int_<2>());
+	f64 r2[2] = {1.0, 2.0};
+	ASSERT_SIMD_EQ(v, r2);
 }
 
 
@@ -112,6 +128,11 @@ SCASE( partial_store, f32 )
 	f32 b[4];
 
 	simd_pack<f32, sse_kind> p(a, tag::unaligned());
+
+	for (int i = 0; i < 4; ++i) b[i] = -1.f;
+	p.partial_store(b, int_<0>());
+	f32 r0[4] = {-1.f, -1.f, -1.f, -1.f};
+	ASSERT_VEC_EQ(4, b, r0);
 
 	for (int i = 0; i < 4; ++i) b[i] = -1.f;
 	p.partial_store(b, int_<1>());
@@ -127,6 +148,11 @@ SCASE( partial_store, f32 )
 	p.partial_store(b, int_<3>());
 	f32 r3[4] = {1.f, 2.f, 3.f, -1.f};
 	ASSERT_VEC_EQ(4, b, r3);
+
+	for (int i = 0; i < 4; ++i) b[i] = -1.f;
+	p.partial_store(b, int_<4>());
+	f32 r4[4] = {1.f, 2.f, 3.f, 4.f};
+	ASSERT_VEC_EQ(4, b, r4);
 }
 
 SCASE( partial_store, f64 )
@@ -136,11 +162,18 @@ SCASE( partial_store, f64 )
 
 	simd_pack<f64, sse_kind> p(a, tag::unaligned());
 
+	p.partial_store(b, int_<0>());
+	f64 r0[2] = {-1.0, -1.0};
+	ASSERT_VEC_EQ(2, b, r0);
+
 	p.partial_store(b, int_<1>());
 	f64 r1[2] = {1.0, -1.0};
 	ASSERT_VEC_EQ(2, b, r1);
-}
 
+	p.partial_store(b, int_<2>());
+	f64 r2[2] = {1.0, 2.0};
+	ASSERT_VEC_EQ(2, b, r2);
+}
 
 
 
