@@ -456,6 +456,28 @@ namespace lsimd
 		return _mm_unpackhi_ps(a.v, a.v);
 	}
 
+#ifdef LSIMD_HAS_SSE3
+
+	LSIMD_ENSURE_INLINE
+	inline sse_f32pk swizzle(const sse_f32pk& a, pat4_<0, 0, 2, 2>)
+	{
+		return _mm_moveldup_ps(a.v);
+	}
+
+	LSIMD_ENSURE_INLINE
+	inline sse_f32pk swizzle(const sse_f32pk& a, pat4_<1, 1, 3, 3>)
+	{
+		return _mm_movehdup_ps(a.v);
+	}
+
+	LSIMD_ENSURE_INLINE
+	inline sse_f64pk swizzle(const sse_f64pk& a, pat2_<0, 0>)
+	{
+		return _mm_movedup_pd(a.v);
+	}
+
+#endif
+
 
 	template<int I>
 	LSIMD_ENSURE_INLINE
