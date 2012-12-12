@@ -85,12 +85,12 @@ namespace lsimd
 			v = _mm_castsi128_ps(_mm_set1_epi32((int)0xffffffff));
 		}
 
-		LSIMD_ENSURE_INLINE explicit simd_pack(f32 x)
+		LSIMD_ENSURE_INLINE explicit simd_pack(const f32& x)
 		{
 			v = _mm_set1_ps(x);
 		}
 
-		LSIMD_ENSURE_INLINE simd_pack(f32 e0, f32 e1, f32 e2, f32 e3)
+		LSIMD_ENSURE_INLINE simd_pack(const f32& e0, const f32& e1, const f32& e2, const f32& e3)
 		{
 			v = _mm_set_ps(e3, e2, e1, e0);
 		}
@@ -135,12 +135,12 @@ namespace lsimd
 			v = _mm_setzero_ps();
 		}
 
-		LSIMD_ENSURE_INLINE void set(f32 x)
+		LSIMD_ENSURE_INLINE void set(const f32& x)
 		{
 			v = _mm_set1_ps(x);
 		}
 
-		LSIMD_ENSURE_INLINE void set(f32 e0, f32 e1, f32 e2, f32 e3)
+		LSIMD_ENSURE_INLINE void set(const f32& e0, const f32& e1, const f32& e2, const f32& e3)
 		{
 			v = _mm_set_ps(e3, e2, e1, e0);
 		}
@@ -168,13 +168,13 @@ namespace lsimd
 		template<int I>
 		LSIMD_ENSURE_INLINE void partial_load(const f32 *a, int_<I>)
 		{
-			v = sse_internal::partial_load<I>(a);
+			v = sse_internal::partial_load(a, int_<I>());
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE void partial_store(f32 *a, int_<I>) const
 		{
-			sse_internal::partial_store<I>(a, v);
+			sse_internal::partial_store(a, v, int_<I>());
 		}
 
 
@@ -188,7 +188,7 @@ namespace lsimd
 		template<int I>
 		LSIMD_ENSURE_INLINE f32 extract() const
 		{
-			return sse_internal::f32p_extract<I>(v);
+			return sse_internal::f32p_extract(v, int_<I>());
 		}
 
 		// Only for debug
@@ -213,7 +213,7 @@ namespace lsimd
 			std::printf(")");
 		}
 
-	}; // end struct simd_pack<f32>
+	};
 
 
 	/******************************************************
@@ -256,12 +256,12 @@ namespace lsimd
 			v = _mm_castsi128_pd(_mm_set1_epi32((int)0xffffffff));
 		}
 
-		LSIMD_ENSURE_INLINE explicit simd_pack(f64 x)
+		LSIMD_ENSURE_INLINE explicit simd_pack(const f64& x)
 		{
 			v = _mm_set1_pd(x);
 		}
 
-		LSIMD_ENSURE_INLINE simd_pack(f64 e0, f64 e1)
+		LSIMD_ENSURE_INLINE simd_pack(const f64& e0, const f64& e1)
 		{
 			v = _mm_set_pd(e1, e0);
 		}
@@ -304,12 +304,12 @@ namespace lsimd
 			v = _mm_setzero_pd();
 		}
 
-		LSIMD_ENSURE_INLINE void set(const f64 x)
+		LSIMD_ENSURE_INLINE void set(const f64& x)
 		{
 			v = _mm_set1_pd(x);
 		}
 
-		LSIMD_ENSURE_INLINE void set(const f64 e0, const f64 e1)
+		LSIMD_ENSURE_INLINE void set(const f64& e0, const f64& e1)
 		{
 			v = _mm_set_pd(e1, e0);
 		}
@@ -337,13 +337,13 @@ namespace lsimd
 		template<int I>
 		LSIMD_ENSURE_INLINE void partial_load(const f64 *a, int_<I>)
 		{
-			v = sse_internal::partial_load<I>(a);
+			v = sse_internal::partial_load(a, int_<I>());
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE void partial_store(f64 *a, int_<I>) const
 		{
-			sse_internal::partial_store<I>(a, v);
+			sse_internal::partial_store(a, v, int_<I>());
 		}
 
 
@@ -357,7 +357,7 @@ namespace lsimd
 		template<int I>
 		LSIMD_ENSURE_INLINE f64 extract() const
 		{
-			return sse_internal::f64p_extract<I>(v);
+			return sse_internal::f64p_extract(v, int_<I>());
 		}
 
 		// Only for debug
