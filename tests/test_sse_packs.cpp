@@ -29,7 +29,7 @@ GCASE( zero )
 {
 	T r[4] = {T(0), T(0), T(0), T(0)};
 
-	simd_pack<T, sse_kind> p = zero_t();
+	simd_pack<T, sse_kind> p = tag::all_zeros();
 	ASSERT_SIMD_EQ( p, r );
 }
 
@@ -38,16 +38,16 @@ GCASE( load )
 	LSIMD_ALIGN_SSE T a[5] = {T(1), T(2), T(3), T(5), T(4)};
 
 	simd_pack<T, sse_kind> p;
-	p.load(a, aligned_t());
+	p.load(a, tag::aligned());
 	ASSERT_SIMD_EQ( p, a );
 
-	p.load(a + 1, unaligned_t());
+	p.load(a + 1, tag::unaligned());
 	ASSERT_SIMD_EQ( p, a + 1 );
 
-	simd_pack<T, sse_kind> pa( a, aligned_t() );
+	simd_pack<T, sse_kind> pa( a, tag::aligned() );
 	ASSERT_SIMD_EQ( pa, a );
 
-	simd_pack<T, sse_kind> pu( a + 1, unaligned_t() );
+	simd_pack<T, sse_kind> pu( a + 1, tag::unaligned() );
 	ASSERT_SIMD_EQ( pu, a + 1 );
 }
 
@@ -58,15 +58,15 @@ GCASE( store )
 	LSIMD_ALIGN_SSE T s[4] = {T(1), T(3), T(2), T(4)};
 	LSIMD_ALIGN_SSE T t[5];
 
-	simd_pack<T, sse_kind> p(s, aligned_t());
+	simd_pack<T, sse_kind> p(s, tag::aligned());
 	ASSERT_SIMD_EQ( p, s );
 
 	clear_zeros(5, t);
-	p.store(t, aligned_t() );
+	p.store(t, tag::aligned() );
 	ASSERT_VEC_EQ(w, t, s);
 
 	clear_zeros(5, t);
-	p.store(t+1, unaligned_t());
+	p.store(t+1, tag::unaligned());
 	ASSERT_VEC_EQ(w, t+1, s);
 }
 
@@ -78,15 +78,15 @@ SCASE( partial_load, f32 )
 
 	simd_pack<f32, sse_kind> v;
 
-	v.partial_load<1>(a);
+	v.partial_load(a, int_<1>());
 	f32 r1[4] = {1.f, 0.f, 0.f, 0.f};
 	ASSERT_SIMD_EQ(v, r1);
 
-	v.partial_load<2>(a);
+	v.partial_load(a, int_<2>());
 	f32 r2[4] = {1.f, 2.f, 0.f, 0.f};
 	ASSERT_SIMD_EQ(v, r2);
 
-	v.partial_load<3>(a);
+	v.partial_load(a, int_<3>());
 	f32 r3[4] = {1.f, 2.f, 3.f, 0.f};
 	ASSERT_SIMD_EQ(v, r3);
 }
@@ -98,7 +98,7 @@ SCASE( partial_load, f64 )
 
 	simd_pack<f64, sse_kind> v;
 
-	v.partial_load<1>(a);
+	v.partial_load(a, int_<1>());
 	f64 r1[2] = {1.0, 0.0};
 	ASSERT_SIMD_EQ(v, r1);
 }
@@ -111,20 +111,20 @@ SCASE( partial_store, f32 )
 	f32 a[4] = {1.f, 2.f, 3.f, 4.f};
 	f32 b[4];
 
-	simd_pack<f32, sse_kind> p(a, unaligned_t());
+	simd_pack<f32, sse_kind> p(a, tag::unaligned());
 
 	for (int i = 0; i < 4; ++i) b[i] = -1.f;
-	p.partial_store<1>(b);
+	p.partial_store(b, int_<1>());
 	f32 r1[4] = {1.f, -1.f, -1.f, -1.f};
 	ASSERT_VEC_EQ(4, b, r1);
 
 	for (int i = 0; i < 4; ++i) b[i] = -1.f;
-	p.partial_store<2>(b);
+	p.partial_store(b, int_<2>());
 	f32 r2[4] = {1.f, 2.f, -1.f, -1.f};
 	ASSERT_VEC_EQ(4, b, r2);
 
 	for (int i = 0; i < 4; ++i) b[i] = -1.f;
-	p.partial_store<3>(b);
+	p.partial_store(b, int_<3>());
 	f32 r3[4] = {1.f, 2.f, 3.f, -1.f};
 	ASSERT_VEC_EQ(4, b, r3);
 }
@@ -134,9 +134,9 @@ SCASE( partial_store, f64 )
 	f64 a[2] = {1.0, 2.0};
 	f64 b[2] = {-1.0, -1.0};
 
-	simd_pack<f64, sse_kind> p(a, unaligned_t());
+	simd_pack<f64, sse_kind> p(a, tag::unaligned());
 
-	p.partial_store<1>(b);
+	p.partial_store(b, int_<1>());
 	f64 r1[2] = {1.0, -1.0};
 	ASSERT_VEC_EQ(2, b, r1);
 }
@@ -234,7 +234,7 @@ GCASE( to_scalar )
 	T sv = T(1.25);
 	LSIMD_ALIGN_SSE T src[4] = {sv, T(1), T(2), T(3)};
 
-	simd_pack<T> a(src, aligned_t());
+	simd_pack<T> a(src, tag::aligned());
 
 	ASSERT_EQ( a.to_scalar(), sv );
 }
@@ -246,7 +246,7 @@ SCASE( extract, f32 )
 {
 	LSIMD_ALIGN_SSE f32 src[4] = {1.11f, 2.22f, 3.33f, 4.44f};
 
-	simd_pack<f32, sse_kind> a(src, aligned_t());
+	simd_pack<f32, sse_kind> a(src, tag::aligned());
 
 	f32 e0 = a.extract<0>();
 	f32 e1 = a.extract<1>();
@@ -264,7 +264,7 @@ SCASE( extract, f64 )
 {
 	LSIMD_ALIGN_SSE f64 src[4] = {1.11, 2.22, 3.33, 4.44};
 
-	simd_pack<f64, sse_kind> a(src, aligned_t());
+	simd_pack<f64, sse_kind> a(src, tag::aligned());
 
 	f64 e0 = a.extract<0>();
 	f64 e1 = a.extract<1>();
@@ -280,19 +280,19 @@ SCASE( broadcast, f32 )
 {
 	LSIMD_ALIGN_SSE f32 s[4] = {1.f, 2.f, 3.f, 4.f};
 
-	simd_pack<f32, sse_kind> a(s, aligned_t());
+	simd_pack<f32, sse_kind> a(s, tag::aligned());
 
 	LSIMD_ALIGN_SSE f32 r0[4] = {s[0], s[0], s[0], s[0]};
-	ASSERT_SIMD_EQ( a.bsx<0>(), r0 );
+	ASSERT_SIMD_EQ( broadcast(a, int_<0>()), r0 );
 
 	LSIMD_ALIGN_SSE f32 r1[4] = {s[1], s[1], s[1], s[1]};
-	ASSERT_SIMD_EQ( a.bsx<1>(), r1 );
+	ASSERT_SIMD_EQ( broadcast(a, int_<1>()), r1 );
 
 	LSIMD_ALIGN_SSE f32 r2[4] = {s[2], s[2], s[2], s[2]};
-	ASSERT_SIMD_EQ( a.bsx<2>(), r2 );
+	ASSERT_SIMD_EQ( broadcast(a, int_<2>()), r2 );
 
 	LSIMD_ALIGN_SSE f32 r3[4] = {s[3], s[3], s[3], s[3]};
-	ASSERT_SIMD_EQ( a.bsx<3>(), r3 );
+	ASSERT_SIMD_EQ( broadcast(a, int_<3>()), r3 );
 }
 
 
@@ -300,90 +300,15 @@ SCASE( broadcast, f64 )
 {
 	LSIMD_ALIGN_SSE f64 s[2] = {1.0, 2.0};
 
-	simd_pack<f64, sse_kind> a(s, aligned_t());
+	simd_pack<f64, sse_kind> a(s, tag::aligned());
 
 	LSIMD_ALIGN_SSE f64 r0[4] = {s[0], s[0]};
-	ASSERT_SIMD_EQ( a.bsx<0>(), r0 );
+	ASSERT_SIMD_EQ( broadcast(a, int_<0>()), r0 );
 
 	LSIMD_ALIGN_SSE f64 r1[4] = {s[1], s[1]};
-	ASSERT_SIMD_EQ( a.bsx<1>(), r1 );
+	ASSERT_SIMD_EQ( broadcast(a, int_<1>()), r1 );
 }
 
-
-template<typename T> class shift_tests;
-
-SCASE( shift, f32 )
-{
-	LSIMD_ALIGN_SSE f32 s[4] = {1.f, 2.f, 3.f, 4.f};
-
-	simd_pack<f32, sse_kind> a(s, aligned_t());
-
-	// shift front
-
-	LSIMD_ALIGN_SSE f32 rf0[4] = {1.f, 2.f, 3.f, 4.f};
-	ASSERT_SIMD_EQ( a.shift_front<0>(), rf0 );
-
-	LSIMD_ALIGN_SSE f32 rf1[4] = {2.f, 3.f, 4.f, 0.f};
-	ASSERT_SIMD_EQ( a.shift_front<1>(), rf1 );
-
-	LSIMD_ALIGN_SSE f32 rf2[4] = {3.f, 4.f, 0.f, 0.f};
-	ASSERT_SIMD_EQ( a.shift_front<2>(), rf2 );
-
-	LSIMD_ALIGN_SSE f32 rf3[4] = {4.f, 0.f, 0.f, 0.f};
-	ASSERT_SIMD_EQ( a.shift_front<3>(), rf3 );
-
-	LSIMD_ALIGN_SSE f32 rf4[4] = {0.f, 0.f, 0.f, 0.f};
-	ASSERT_SIMD_EQ( a.shift_front<4>(), rf4 );
-
-	// shift back
-
-	LSIMD_ALIGN_SSE f32 rb0[4] = {1.f, 2.f, 3.f, 4.f};
-	ASSERT_SIMD_EQ( a.shift_back<0>(), rb0 );
-
-	LSIMD_ALIGN_SSE f32 rb1[4] = {0.0f, 1.f, 2.f, 3.f};
-	ASSERT_SIMD_EQ( a.shift_back<1>(), rb1 );
-
-	LSIMD_ALIGN_SSE f32 rb2[4] = {0.0f, 0.0f, 1.f, 2.f};
-	ASSERT_SIMD_EQ( a.shift_back<2>(), rb2 );
-
-	LSIMD_ALIGN_SSE f32 rb3[4] = {0.0f, 0.0f, 0.0f, 1.f};
-	ASSERT_SIMD_EQ( a.shift_back<3>(), rb3 );
-
-	LSIMD_ALIGN_SSE f32 rb4[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-	ASSERT_SIMD_EQ( a.shift_back<4>(), rb4 );
-}
-
-
-
-SCASE( shift, f64 )
-{
-	LSIMD_ALIGN_SSE f64 s[2] = {1.0, 2.0};
-
-	simd_pack<f64, sse_kind> a(s, aligned_t());
-
-	// shift front
-
-	LSIMD_ALIGN_SSE f64 rf0[2] = {1.0, 2.0};
-	ASSERT_SIMD_EQ( a.shift_front<0>(), rf0 );
-
-	LSIMD_ALIGN_SSE f64 rf1[2] = {2.0, 0.0};
-	ASSERT_SIMD_EQ( a.shift_front<1>(), rf1 );
-
-	LSIMD_ALIGN_SSE f64 rf2[2] = {0.0, 0.0};
-	ASSERT_SIMD_EQ( a.shift_front<2>(), rf2 );
-
-	// shift back
-
-	LSIMD_ALIGN_SSE f64 rb0[2] = {1.0, 2.0};
-	ASSERT_SIMD_EQ( a.shift_back<0>(), rb0 );
-
-	LSIMD_ALIGN_SSE f64 rb1[2] = {0.0, 1.0};
-	ASSERT_SIMD_EQ( a.shift_back<1>(), rb1 );
-
-	LSIMD_ALIGN_SSE f64 rb2[2] = {0.0, 0.0};
-	ASSERT_SIMD_EQ( a.shift_back<2>(), rb2 );
-
-}
 
 
 template<typename T> class duplicate_tests;
@@ -391,44 +316,40 @@ template<typename T> class duplicate_tests;
 SCASE( duplicate, f32 )
 {
 	LSIMD_ALIGN_SSE f32 s[4] = {1.f, 2.f, 3.f, 4.f};
-	LSIMD_ALIGN_SSE f32 dst[4] = {0.f, 0.f, 0.f, 0.f};
 
-	sse_f32pk a(s, aligned_t());
+	sse_f32pk a(s, tag::aligned());
 
-	LSIMD_ALIGN_SSE f32 r01[4] = {1.f, 2.f, 1.f, 2.f};
-	a.dup_low().store(dst, aligned_t());
-	ASSERT_VEC_EQ(4, dst, r01);
+	LSIMD_ALIGN_SSE f32 r01[4] = {1.f, 1.f, 2.f, 2.f};
+	ASSERT_SIMD_EQ( swizzle(a, pat4_<0, 0, 1, 1>()), r01);
 
-	LSIMD_ALIGN_SSE f32 r23[4] = {3.f, 4.f, 3.f, 4.f};
-	a.dup_high().store(dst, aligned_t());
-	ASSERT_VEC_EQ(4, dst, r23);
+	LSIMD_ALIGN_SSE f32 r23[4] = {3.f, 3.f, 4.f, 4.f};
+	ASSERT_SIMD_EQ( swizzle(a, pat4_<2, 2, 3, 3>()), r23);
 
 	LSIMD_ALIGN_SSE f32 r02[4] = {1.f, 1.f, 3.f, 3.f};
-	a.dup2_low().store(dst, aligned_t());
-	ASSERT_VEC_EQ(4, dst, r02);
+	ASSERT_SIMD_EQ( swizzle(a, pat4_<0, 0, 2, 2>()), r02);
 
 	LSIMD_ALIGN_SSE f32 r13[4] = {2.f, 2.f, 4.f, 4.f};
-	a.dup2_high().store(dst, aligned_t());
-	ASSERT_VEC_EQ(4, dst, r13);
+	ASSERT_SIMD_EQ( swizzle(a, pat4_<1, 1, 3, 3>()), r13);
 
+	LSIMD_ALIGN_SSE f32 s01[4] = {1.f, 2.f, 1.f, 2.f};
+	ASSERT_SIMD_EQ( swizzle(a, pat4_<0, 1, 0, 1>()), s01);
+
+	LSIMD_ALIGN_SSE f32 s23[4] = {3.f, 4.f, 3.f, 4.f};
+	ASSERT_SIMD_EQ( swizzle(a, pat4_<2, 3, 2, 3>()), s23);
 }
 
 
 SCASE( duplicate, f64 )
 {
 	LSIMD_ALIGN_SSE f64 s[2] = {1.0, 2.0};
-	LSIMD_ALIGN_SSE f64 dst[2] = {0.0, 0.0};
 
-	sse_f64pk a(s, aligned_t());
+	sse_f64pk a(s, tag::aligned());
 
 	LSIMD_ALIGN_SSE f64 r0[2] = {1.0, 1.0};
-	a.dup_low().store(dst, aligned_t());
-	ASSERT_VEC_EQ(2, dst, r0);
+	ASSERT_SIMD_EQ( swizzle(a, pat2_<0, 0>()), r0);
 
 	LSIMD_ALIGN_SSE f64 r1[2] = {2.0, 2.0};
-	a.dup_high().store(dst, aligned_t());
-	ASSERT_VEC_EQ(2, dst, r1);
-
+	ASSERT_SIMD_EQ( swizzle(a, pat2_<1, 1>()), r1);
 }
 
 
@@ -437,54 +358,43 @@ template<typename T> class swizzle_tests;
 SCASE( swizzle, f32 )
 {
 	LSIMD_ALIGN_SSE f32 s[4] = {1.f, 2.f, 3.f, 4.f};
-	LSIMD_ALIGN_SSE f32 dst[4] = {0.f, 0.f, 0.f, 0.f};
 
-	sse_f32pk a(s, aligned_t());
+	sse_f32pk a(s, tag::aligned());
 
 	LSIMD_ALIGN_SSE f32 r1[4] = {1.f, 2.f, 3.f, 4.f};
-	a.swizzle<0,1,2,3>().store(dst, aligned_t());
-	ASSERT_VEC_EQ(4, dst, r1);
+	ASSERT_SIMD_EQ( swizzle(a, pat4_<0,1,2,3>()), r1);
 
 	LSIMD_ALIGN_SSE f32 r2[4] = {4.f, 3.f, 2.f, 1.f};
-	a.swizzle<3,2,1,0>().store(dst, aligned_t());
-	ASSERT_VEC_EQ(4, dst, r2);
+	ASSERT_SIMD_EQ( swizzle(a, pat4_<3,2,1,0>()), r2);
 
 	LSIMD_ALIGN_SSE f32 r3[4] = {2.f, 1.f, 4.f, 3.f};
-	a.swizzle<1,0,3,2>().store(dst, aligned_t());
-	ASSERT_VEC_EQ(4, dst, r3);
+	ASSERT_SIMD_EQ( swizzle(a, pat4_<1,0,3,2>()), r3);
 
 	LSIMD_ALIGN_SSE f32 r4[4] = {3.f, 4.f, 1.f, 2.f};
-	a.swizzle<2,3,0,1>().store(dst, aligned_t());
-	ASSERT_VEC_EQ(4, dst, r4);
+	ASSERT_SIMD_EQ( swizzle(a, pat4_<2,3,0,1>()), r4);
 
 	LSIMD_ALIGN_SSE f32 r5[4] = {3.f, 2.f, 1.f, 4.f};
-	a.swizzle<2,1,0,3>().store(dst, aligned_t());
-	ASSERT_VEC_EQ(4, dst, r5);
+	ASSERT_SIMD_EQ( swizzle(a, pat4_<2,1,0,3>()), r5);
 }
 
 
 SCASE( swizzle, f64 )
 {
 	LSIMD_ALIGN_SSE f64 s[4] = {1.0, 2.0};
-	LSIMD_ALIGN_SSE f64 dst[4] = {0.0, 0.0};
 
-	sse_f64pk a(s, aligned_t());
+	sse_f64pk a(s, tag::aligned());
 
 	LSIMD_ALIGN_SSE f64 r0[2] = {1.0, 1.0};
-	a.swizzle<0,0>().store(dst, aligned_t());
-	ASSERT_VEC_EQ(2, dst, r0);
+	ASSERT_SIMD_EQ( swizzle(a, pat2_<0,0>()), r0);
 
 	LSIMD_ALIGN_SSE f64 r1[2] = {1.0, 2.0};
-	a.swizzle<0,1>().store(dst, aligned_t());
-	ASSERT_VEC_EQ(2, dst, r1);
+	ASSERT_SIMD_EQ( swizzle(a, pat2_<0,1>()), r1);
 
 	LSIMD_ALIGN_SSE f64 r2[2] = {2.0, 1.0};
-	a.swizzle<1,0>().store(dst, aligned_t());
-	ASSERT_VEC_EQ(2, dst, r2);
+	ASSERT_SIMD_EQ( swizzle(a, pat2_<1,0>()), r2);
 
 	LSIMD_ALIGN_SSE f64 r3[2] = {2.0, 2.0};
-	a.swizzle<1,1>().store(dst, aligned_t());
-	ASSERT_VEC_EQ(2, dst, r3);
+	ASSERT_SIMD_EQ( swizzle(a, pat2_<1,1>()), r3);
 }
 
 test_pack* tpack_manipulates()
@@ -500,9 +410,6 @@ test_pack* tpack_manipulates()
 	tp->add( new broadcast_tests<f32>() );
 	tp->add( new broadcast_tests<f64>() );
 
-	tp->add( new shift_tests<f32>() );
-	tp->add( new shift_tests<f64>() );
-
 	tp->add( new duplicate_tests<f32>() );
 	tp->add( new duplicate_tests<f64>() );
 
@@ -513,105 +420,10 @@ test_pack* tpack_manipulates()
 }
 
 
-
-/************************************************
- *
- *  entry statistics
- *
- ************************************************/
-
-template<typename T> class sum_tests;
-
-SCASE( sum, f32 )
-{
-	LSIMD_ALIGN_SSE f32 a[4] = {1.f, 2.f, 3.f, 4.f};
-	simd_pack<f32, sse_kind> p(a, aligned_t());
-
-	ASSERT_EQ( p.sum(), 10.f );
-	ASSERT_EQ( p.partial_sum<1>(), 1.f );
-	ASSERT_EQ( p.partial_sum<2>(), 3.f );
-	ASSERT_EQ( p.partial_sum<3>(), 6.f );
-}
-
-SCASE( sum, f64 )
-{
-	LSIMD_ALIGN_SSE f64 a[2] = {2.0, 3.0};
-	simd_pack<f64, sse_kind> p(a, aligned_t());
-
-	ASSERT_EQ( p.sum(), 5.0 );
-	ASSERT_EQ( p.partial_sum<1>(), 2.0 );
-}
-
-
-template<typename T> class max_tests;
-
-SCASE( max, f32 )
-{
-	LSIMD_ALIGN_SSE f32 a[4] = {1.f, 3.f, 4.f, 2.f};
-	simd_pack<f32, sse_kind> p(a, aligned_t());
-
-	ASSERT_EQ( p.max(), 4.f );
-	ASSERT_EQ( p.partial_max<1>(), 1.f );
-	ASSERT_EQ( p.partial_max<2>(), 3.f );
-	ASSERT_EQ( p.partial_max<3>(), 4.f );
-}
-
-SCASE( max, f64 )
-{
-	LSIMD_ALIGN_SSE f64 a[2] = {2.0, 3.0};
-	simd_pack<f64, sse_kind> p(a, aligned_t());
-
-	ASSERT_EQ( p.max(), 3.0 );
-	ASSERT_EQ( p.partial_max<1>(), 2.0 );
-}
-
-
-template<typename T> class min_tests;
-
-SCASE( min, f32 )
-{
-	LSIMD_ALIGN_SSE f32 a[4] = {3.f, 2.f, 4.f, 1.f};
-	simd_pack<f32, sse_kind> p(a, aligned_t());
-
-	ASSERT_EQ( p.min(), 1.f );
-	ASSERT_EQ( p.partial_min<1>(), 3.f );
-	ASSERT_EQ( p.partial_min<2>(), 2.f );
-	ASSERT_EQ( p.partial_min<3>(), 2.f );
-}
-
-SCASE( min, f64 )
-{
-	LSIMD_ALIGN_SSE f64 a[2] = {2.0, 3.0};
-	simd_pack<f64, sse_kind> p(a, aligned_t());
-
-	ASSERT_EQ( p.min(), 2.0 );
-	ASSERT_EQ( p.partial_min<1>(), 2.0 );
-}
-
-
-
-test_pack* tpack_statistics()
-{
-	ltest::test_pack* tp = new test_pack("statistics");
-
-	tp->add( new sum_tests<f32>() );
-	tp->add( new sum_tests<f64>() );
-
-	tp->add( new max_tests<f32>() );
-	tp->add( new max_tests<f64>() );
-
-	tp->add( new min_tests<f32>() );
-	tp->add( new min_tests<f64>() );
-
-	return tp;
-}
-
-
 void lsimd::add_test_packs()
 {
 	lsimd_main_suite.add( tpack_constructs() );
 	lsimd_main_suite.add( tpack_manipulates() );
-	lsimd_main_suite.add( tpack_statistics() );
 }
 
 

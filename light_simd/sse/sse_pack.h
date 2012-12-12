@@ -22,7 +22,11 @@
 
 namespace lsimd
 {
-	// traits
+	/******************************************************
+	 *
+	 *  traits
+	 *
+	 ******************************************************/
 
 	template<>
 	struct simd_traits<float, sse_kind>
@@ -38,6 +42,13 @@ namespace lsimd
 		typedef double scalar_type;
 		static const unsigned int pack_width = 2;
 	};
+
+
+	/******************************************************
+	 *
+	 *  SSE float
+	 *
+	 ******************************************************/
 
 
 	/**
@@ -62,25 +73,29 @@ namespace lsimd
 
 		LSIMD_ENSURE_INLINE simd_pack() { }
 
-		LSIMD_ENSURE_INLINE simd_pack(const __m128 v_)
-		: v(v_) { }
+		LSIMD_ENSURE_INLINE simd_pack(const __m128& v_) : v(v_) { }
 
-		LSIMD_ENSURE_INLINE simd_pack( zero_t )
+		LSIMD_ENSURE_INLINE simd_pack( tag::all_zeros )
 		{
 			v = _mm_setzero_ps();
 		}
 
-		LSIMD_ENSURE_INLINE explicit simd_pack(const f32 x)
+		LSIMD_ENSURE_INLINE simd_pack( tag::all_nonzeros )
+		{
+			v = _mm_castsi128_ps(_mm_set1_epi32((int)0xffffffff));
+		}
+
+		LSIMD_ENSURE_INLINE explicit simd_pack(f32 x)
 		{
 			v = _mm_set1_ps(x);
 		}
 
-		LSIMD_ENSURE_INLINE simd_pack(const f32 e0, const f32 e1, const f32 e2, const f32 e3)
+		LSIMD_ENSURE_INLINE simd_pack(f32 e0, f32 e1, f32 e2, f32 e3)
 		{
 			v = _mm_set_ps(e3, e2, e1, e0);
 		}
 
-		LSIMD_ENSURE_INLINE simd_pack(const bool b0, const bool b1, const bool b2, const bool b3)
+		LSIMD_ENSURE_INLINE simd_pack(bool b0, bool b1, bool b2, bool b3)
 		{
 			const int i0 = b0 ? (int)(0xffffffff) : 0;
 			const int i1 = b1 ? (int)(0xffffffff) : 0;
@@ -90,12 +105,12 @@ namespace lsimd
 			v = _mm_castsi128_ps(_mm_set_epi32(i3, i2, i1, i0));
 		}
 
-		LSIMD_ENSURE_INLINE simd_pack(const f32* a, aligned_t)
+		LSIMD_ENSURE_INLINE simd_pack(const f32* a, tag::aligned)
 		{
 			v = _mm_load_ps(a);
 		}
 
-		LSIMD_ENSURE_INLINE simd_pack(const f32* a, unaligned_t)
+		LSIMD_ENSURE_INLINE simd_pack(const f32* a, tag::unaligned)
 		{
 			v = _mm_loadu_ps(a);
 		}
@@ -115,49 +130,49 @@ namespace lsimd
 
 		//  set, load, and store
 
-		LSIMD_ENSURE_INLINE void set_zero()
+		LSIMD_ENSURE_INLINE void set_zeros()
 		{
 			v = _mm_setzero_ps();
 		}
 
-		LSIMD_ENSURE_INLINE void set(const f32 x)
+		LSIMD_ENSURE_INLINE void set(f32 x)
 		{
 			v = _mm_set1_ps(x);
 		}
 
-		LSIMD_ENSURE_INLINE void set(const f32 e0, const f32 e1, const f32 e2, const f32 e3)
+		LSIMD_ENSURE_INLINE void set(f32 e0, f32 e1, f32 e2, f32 e3)
 		{
 			v = _mm_set_ps(e3, e2, e1, e0);
 		}
 
-		LSIMD_ENSURE_INLINE void load(const f32* a, aligned_t)
+		LSIMD_ENSURE_INLINE void load(const f32* a, tag::aligned)
 		{
 			v = _mm_load_ps(a);
 		}
 
-		LSIMD_ENSURE_INLINE void load(const f32* a, unaligned_t)
+		LSIMD_ENSURE_INLINE void load(const f32* a, tag::unaligned)
 		{
 			v = _mm_loadu_ps(a);
 		}
 
-		LSIMD_ENSURE_INLINE void store(f32* a, aligned_t) const
+		LSIMD_ENSURE_INLINE void store(f32* a, tag::aligned) const
 		{
 			_mm_store_ps(a, v);
 		}
 
-		LSIMD_ENSURE_INLINE void store(f32* a, unaligned_t) const
+		LSIMD_ENSURE_INLINE void store(f32* a, tag::unaligned) const
 		{
 			_mm_storeu_ps(a, v);
 		}
 
 		template<int I>
-		LSIMD_ENSURE_INLINE void partial_load(const f32 *a)
+		LSIMD_ENSURE_INLINE void partial_load(const f32 *a, int_<I>)
 		{
 			v = sse_internal::partial_load<I>(a);
 		}
 
 		template<int I>
-		LSIMD_ENSURE_INLINE void partial_store(f32 *a) const
+		LSIMD_ENSURE_INLINE void partial_store(f32 *a, int_<I>) const
 		{
 			sse_internal::partial_store<I>(a, v);
 		}
@@ -174,107 +189,6 @@ namespace lsimd
 		LSIMD_ENSURE_INLINE f32 extract() const
 		{
 			return sse_internal::f32p_extract<I>(v);
-		}
-
-		template<int I>
-		LSIMD_ENSURE_INLINE simd_pack bsx() const
-		{
-			return _mm_shuffle_ps(v, v, _MM_SHUFFLE(I, I, I, I));
-		}
-
-		template<int I>
-		LSIMD_ENSURE_INLINE simd_pack shift_front() const
-		{
-			return _mm_castsi128_ps(_mm_srli_si128(_mm_castps_si128(v), (I << 2)));
-		}
-
-		template<int I>
-		LSIMD_ENSURE_INLINE simd_pack shift_back() const
-		{
-			return _mm_castsi128_ps(_mm_slli_si128(_mm_castps_si128(v), (I << 2)));
-		}
-
-		template<int I0, int I1, int I2, int I3>
-		LSIMD_ENSURE_INLINE simd_pack swizzle() const
-		{
-			return _mm_shuffle_ps(v, v, _MM_SHUFFLE(I3, I2, I1, I0));
-		}
-
-		LSIMD_ENSURE_INLINE simd_pack dup_low() const // (e0, e1, e0, e1)
-		{
-			return sse_internal::f32_dup_low(v);
-		}
-
-		LSIMD_ENSURE_INLINE simd_pack dup_high() const // (e2, e3, e2, e3)
-		{
-			return sse_internal::f32_dup_high(v);
-		}
-
-		LSIMD_ENSURE_INLINE simd_pack dup2_low() const // (e0, e0, e2, e2)
-		{
-			return sse_internal::f32_dup2_low(v);
-		}
-
-		LSIMD_ENSURE_INLINE simd_pack dup2_high() const // (e1, e1, e3, e3)
-		{
-			return sse_internal::f32_dup2_high(v);
-		}
-
-		// reduction
-
-		LSIMD_ENSURE_INLINE f32 sum() const
-		{
-			return sse_internal::f32_sum(v);
-		}
-
-		template<int I>
-		LSIMD_ENSURE_INLINE f32 partial_sum() const
-		{
-			return sse_internal::f32_partial_sum<I>(v);
-		}
-
-		LSIMD_ENSURE_INLINE f32 (max)() const
-		{
-			return sse_internal::f32_max(v);
-		}
-
-		template<int I>
-		LSIMD_ENSURE_INLINE f32 partial_max() const
-		{
-			return sse_internal::f32_partial_max<I>(v);
-		}
-
-		LSIMD_ENSURE_INLINE f32 (min)() const
-		{
-			return sse_internal::f32_min(v);
-		}
-
-		template<int I>
-		LSIMD_ENSURE_INLINE f32 partial_min() const
-		{
-			return sse_internal::f32_partial_min<I>(v);
-		}
-
-		// constants
-
-		LSIMD_ENSURE_INLINE static simd_pack false_mask()
-		{
-			return _mm_setzero_ps();
-		}
-
-		LSIMD_ENSURE_INLINE static simd_pack true_mask()
-		{
-			return _mm_castsi128_ps(sse_internal::all_one_bits());
-		}
-
-		LSIMD_ENSURE_INLINE static simd_pack zeros()
-		{
-			return _mm_setzero_ps();
-		}
-
-		LSIMD_ENSURE_INLINE static simd_pack ones()
-		{
-			return _mm_set1_ps(1.f);
 		}
 
 		// Only for debug
@@ -302,6 +216,12 @@ namespace lsimd
 	}; // end struct simd_pack<f32>
 
 
+	/******************************************************
+	 *
+	 *  SSE double
+	 *
+	 ******************************************************/
+
 	/**
 	 * @brief SSE pack with two double-precision real values.
 	 */
@@ -324,25 +244,29 @@ namespace lsimd
 
 		LSIMD_ENSURE_INLINE simd_pack() { }
 
-		LSIMD_ENSURE_INLINE simd_pack(const intern_type v_)
-		: v(v_) { }
+		LSIMD_ENSURE_INLINE simd_pack(const __m128d& v_) : v(v_) { }
 
-		LSIMD_ENSURE_INLINE simd_pack( zero_t )
+		LSIMD_ENSURE_INLINE simd_pack( tag::all_zeros )
 		{
 			v = _mm_setzero_pd();
 		}
 
-		LSIMD_ENSURE_INLINE explicit simd_pack(const f64 x)
+		LSIMD_ENSURE_INLINE simd_pack( tag::all_nonzeros )
+		{
+			v = _mm_castsi128_pd(_mm_set1_epi32((int)0xffffffff));
+		}
+
+		LSIMD_ENSURE_INLINE explicit simd_pack(f64 x)
 		{
 			v = _mm_set1_pd(x);
 		}
 
-		LSIMD_ENSURE_INLINE simd_pack(const f64 e0, const f64 e1)
+		LSIMD_ENSURE_INLINE simd_pack(f64 e0, f64 e1)
 		{
 			v = _mm_set_pd(e1, e0);
 		}
 
-		LSIMD_ENSURE_INLINE simd_pack(const bool b0, const bool b1)
+		LSIMD_ENSURE_INLINE simd_pack(bool b0, bool b1)
 		{
 			int i0, i1, i2, i3;
 			i0 = i1 = (b0 ? (int)(0xffffffff) : 0);
@@ -350,12 +274,12 @@ namespace lsimd
 			v = _mm_castsi128_pd(_mm_set_epi32(i3, i2, i1, i0));
 		}
 
-		LSIMD_ENSURE_INLINE simd_pack(const f64* a, aligned_t)
+		LSIMD_ENSURE_INLINE simd_pack(const f64* a, tag::aligned)
 		{
 			v = _mm_load_pd(a);
 		}
 
-		LSIMD_ENSURE_INLINE simd_pack(const f64* a, unaligned_t)
+		LSIMD_ENSURE_INLINE simd_pack(const f64* a, tag::unaligned)
 		{
 			v = _mm_loadu_pd(a);
 		}
@@ -390,34 +314,34 @@ namespace lsimd
 			v = _mm_set_pd(e1, e0);
 		}
 
-		LSIMD_ENSURE_INLINE void load(const f64* a, aligned_t)
+		LSIMD_ENSURE_INLINE void load(const f64* a, tag::aligned)
 		{
 			v = _mm_load_pd(a);
 		}
 
-		LSIMD_ENSURE_INLINE void load(const f64* a, unaligned_t)
+		LSIMD_ENSURE_INLINE void load(const f64* a, tag::unaligned)
 		{
 			v = _mm_loadu_pd(a);
 		}
 
-		LSIMD_ENSURE_INLINE void store(f64* a, aligned_t) const
+		LSIMD_ENSURE_INLINE void store(f64* a, tag::aligned) const
 		{
 			_mm_store_pd(a, v);
 		}
 
-		LSIMD_ENSURE_INLINE void store(f64* a, unaligned_t) const
+		LSIMD_ENSURE_INLINE void store(f64* a, tag::unaligned) const
 		{
 			_mm_storeu_pd(a, v);
 		}
 
 		template<int I>
-		LSIMD_ENSURE_INLINE void partial_load(const f64 *a)
+		LSIMD_ENSURE_INLINE void partial_load(const f64 *a, int_<I>)
 		{
 			v = sse_internal::partial_load<I>(a);
 		}
 
 		template<int I>
-		LSIMD_ENSURE_INLINE void partial_store(f64 *a) const
+		LSIMD_ENSURE_INLINE void partial_store(f64 *a, int_<I>) const
 		{
 			sse_internal::partial_store<I>(a, v);
 		}
@@ -434,99 +358,6 @@ namespace lsimd
 		LSIMD_ENSURE_INLINE f64 extract() const
 		{
 			return sse_internal::f64p_extract<I>(v);
-		}
-
-		template<int I>
-		LSIMD_ENSURE_INLINE simd_pack bsx() const
-		{
-			return _mm_shuffle_pd(v, v, _MM_SHUFFLE2(I, I));
-		}
-
-		template<int I>
-		LSIMD_ENSURE_INLINE simd_pack shift_front() const
-		{
-			return _mm_castsi128_pd(_mm_srli_si128(_mm_castpd_si128(v), (I << 3)));
-		}
-
-		template<int I>
-		LSIMD_ENSURE_INLINE simd_pack shift_back() const
-		{
-			return _mm_castsi128_pd(_mm_slli_si128(_mm_castpd_si128(v), (I << 3)));
-		}
-
-		template<int I0, int I1>
-		LSIMD_ENSURE_INLINE simd_pack swizzle() const
-		{
-			return _mm_shuffle_pd(v, v, _MM_SHUFFLE2(I1, I0));
-		}
-
-		LSIMD_ENSURE_INLINE simd_pack dup_low() const
-		{
-			return sse_internal::f64_dup_low(v);
-		}
-
-		LSIMD_ENSURE_INLINE simd_pack dup_high() const
-		{
-			return sse_internal::f64_dup_high(v);
-		}
-
-
-		// statistics
-
-		LSIMD_ENSURE_INLINE f64 sum() const
-		{
-			return sse_internal::f64_sum(v);
-		}
-
-		template<int I>
-		LSIMD_ENSURE_INLINE f64 partial_sum() const
-		{
-			return sse_internal::f64_partial_sum<I>(v);
-		}
-
-		LSIMD_ENSURE_INLINE f64 (max)() const
-		{
-			return sse_internal::f64_max(v);
-		}
-
-		template<int I>
-		LSIMD_ENSURE_INLINE f64 partial_max() const
-		{
-			return sse_internal::f64_partial_max<I>(v);
-		}
-
-		LSIMD_ENSURE_INLINE f64 (min)() const
-		{
-			return sse_internal::f64_min(v);
-		}
-
-		template<int I>
-		LSIMD_ENSURE_INLINE f64 partial_min() const
-		{
-			return sse_internal::f64_partial_min<I>(v);
-		}
-
-
-		// constants
-
-		LSIMD_ENSURE_INLINE static simd_pack false_mask()
-		{
-			return _mm_setzero_pd();
-		}
-
-		LSIMD_ENSURE_INLINE static simd_pack true_mask()
-		{
-			return _mm_castsi128_pd(sse_internal::all_one_bits());
-		}
-
-		LSIMD_ENSURE_INLINE static simd_pack zeros()
-		{
-			return _mm_setzero_pd();
-		}
-
-		LSIMD_ENSURE_INLINE static simd_pack ones()
-		{
-			return _mm_set1_pd(1.0);
 		}
 
 		// Only for debug
@@ -558,56 +389,86 @@ namespace lsimd
 	typedef simd_pack<f64, sse_kind> sse_f64pk;
 
 
-	// Some auxiliary routines
+	// Shuffling
 
 	template<int I0, int I1, int I2, int I3>
 	LSIMD_ENSURE_INLINE
-	inline sse_f32pk shuffle(const sse_f32pk& a, const sse_f32pk& b)
+	inline sse_f32pk shuffle(const sse_f32pk& a, const sse_f32pk& b, pat4_<I0, I1, I2, I3>)
 	{
 		return _mm_shuffle_ps(a.v, b.v, _MM_SHUFFLE(I3, I2, I1, I0));
 	}
 
 	template<int I0, int I1>
 	LSIMD_ENSURE_INLINE
-	inline sse_f64pk shuffle(const sse_f64pk& a, const sse_f64pk& b)
+	inline sse_f64pk shuffle(const sse_f64pk& a, const sse_f64pk& b, pat2_<I0, I1>)
 	{
 		return _mm_shuffle_pd(a.v, b.v, _MM_SHUFFLE2(I1, I0));
 	}
 
 	LSIMD_ENSURE_INLINE
-	inline sse_f32pk merge_low(const sse_f32pk& a, const sse_f32pk& b)
+	inline sse_f32pk shuffle(const sse_f32pk& a, const sse_f32pk& b, pat4_<0, 1, 0, 1>)
 	{
 		return _mm_movelh_ps(a.v, b.v);
 	}
 
+	template<int I0, int I1>
 	LSIMD_ENSURE_INLINE
-	inline sse_f32pk merge_high(const sse_f32pk& a, const sse_f32pk& b)
+	inline sse_f32pk shuffle(const sse_f32pk& a, const sse_f32pk& b, pat4_<2, 3, 2, 3>)
 	{
-		return _mm_movehl_ps(b.v, a.v);
+		return _mm_movehl_ps(a.v, b.v);
 	}
 
 	LSIMD_ENSURE_INLINE
-	inline sse_f32pk unpack_low(const sse_f32pk& a, const sse_f32pk& b) // (a[0], b[0], a[1], b[1])
-	{
-		return _mm_unpacklo_ps(a.v, b.v);
-	}
-
-	LSIMD_ENSURE_INLINE
-	inline sse_f32pk unpack_high(const sse_f32pk& a, const sse_f32pk& b) // (a[2], b[2], a[3], b[3])
-	{
-		return _mm_unpackhi_ps(a.v, b.v);
-	}
-
-	LSIMD_ENSURE_INLINE
-	inline sse_f64pk unpack_low(const sse_f64pk& a, const sse_f64pk& b) // (a[0], b[0])
+	inline sse_f64pk shuffle(const sse_f64pk& a, const sse_f64pk& b, pat2_<0, 0>)
 	{
 		return _mm_unpacklo_pd(a.v, b.v);
 	}
 
 	LSIMD_ENSURE_INLINE
-	inline sse_f64pk unpack_high(const sse_f64pk& a, const sse_f64pk& b) // (a[1], b[1])
+	inline sse_f64pk shuffle(const sse_f64pk& a, const sse_f64pk& b, pat2_<1, 1>)
 	{
 		return _mm_unpackhi_pd(a.v, b.v);
+	}
+
+	template<int I0, int I1, int I2, int I3>
+	LSIMD_ENSURE_INLINE
+	inline sse_f32pk swizzle(const sse_f32pk& a, pat4_<I0, I1, I2, I3>)
+	{
+		return shuffle(a, a, pat4_<I0, I1, I2, I3>());
+	}
+
+	template<int I0, int I1>
+	LSIMD_ENSURE_INLINE
+	inline sse_f64pk swizzle(const sse_f64pk& a, pat2_<I0, I1>)
+	{
+		return shuffle(a, a, pat2_<I0, I1>());
+	}
+
+	LSIMD_ENSURE_INLINE
+	inline sse_f32pk swizzle(const sse_f32pk& a, pat4_<0, 0, 1, 1>)
+	{
+		return _mm_unpacklo_ps(a.v, a.v);
+	}
+
+	LSIMD_ENSURE_INLINE
+	inline sse_f32pk swizzle(const sse_f32pk& a, pat4_<2, 2, 3, 3>)
+	{
+		return _mm_unpackhi_ps(a.v, a.v);
+	}
+
+
+	template<int I>
+	LSIMD_ENSURE_INLINE
+	inline sse_f32pk broadcast(const sse_f32pk& a, int_<I>)
+	{
+		return swizzle(a, pat4_<I, I, I, I>());
+	}
+
+	template<int I>
+	LSIMD_ENSURE_INLINE
+	inline sse_f64pk broadcast(const sse_f64pk& a, int_<I>)
+	{
+		return swizzle(a, pat2_<I, I>());
 	}
 
 }

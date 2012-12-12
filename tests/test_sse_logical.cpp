@@ -56,8 +56,8 @@ inline bool is_mask_eq(const simd_pack<T, sse_kind>&  p, const bool *ba)
 
 GCASE( consts )
 {
-	simd_pack<T, sse_kind> tm = simd_pack<T, sse_kind>::true_mask();
-	simd_pack<T, sse_kind> fm = simd_pack<T, sse_kind>::false_mask();
+	simd_pack<T, sse_kind> tm = tag::all_nonzeros();
+	simd_pack<T, sse_kind> fm = tag::all_zeros();
 
 	bool ta[4] = {true, true, true, true};
 	bool fa[4] = {false, false, false, false};
@@ -96,9 +96,9 @@ GCASE( cmp_eq )
 		ac[i] = (a[i] == c[i]);
 	}
 
-	simd_pack<T, sse_kind> pa(a, aligned_t());
-	simd_pack<T, sse_kind> pb(b, aligned_t());
-	simd_pack<T, sse_kind> pc(c, aligned_t());
+	simd_pack<T, sse_kind> pa(a, tag::aligned());
+	simd_pack<T, sse_kind> pb(b, tag::aligned());
+	simd_pack<T, sse_kind> pc(c, tag::aligned());
 
 	ASSERT_TRUE( is_mask_eq(pa == pb, ab) );
 	ASSERT_TRUE( is_mask_eq(pa == pc, ac) );
@@ -117,9 +117,9 @@ GCASE( cmp_ne )
 		ac[i] = (a[i] != c[i]);
 	}
 
-	simd_pack<T, sse_kind> pa(a, aligned_t());
-	simd_pack<T, sse_kind> pb(b, aligned_t());
-	simd_pack<T, sse_kind> pc(c, aligned_t());
+	simd_pack<T, sse_kind> pa(a, tag::aligned());
+	simd_pack<T, sse_kind> pb(b, tag::aligned());
+	simd_pack<T, sse_kind> pc(c, tag::aligned());
 
 	ASSERT_TRUE( is_mask_eq(pa != pb, ab) );
 	ASSERT_TRUE( is_mask_eq(pa != pc, ac) );
@@ -138,9 +138,9 @@ GCASE( cmp_lt )
 		ac[i] = a[i] < c[i];
 	}
 
-	simd_pack<T, sse_kind> pa(a, aligned_t());
-	simd_pack<T, sse_kind> pb(b, aligned_t());
-	simd_pack<T, sse_kind> pc(c, aligned_t());
+	simd_pack<T, sse_kind> pa(a, tag::aligned());
+	simd_pack<T, sse_kind> pb(b, tag::aligned());
+	simd_pack<T, sse_kind> pc(c, tag::aligned());
 
 	ASSERT_TRUE( is_mask_eq(pa < pb, ab) );
 	ASSERT_TRUE( is_mask_eq(pa < pc, ac) );
@@ -159,9 +159,9 @@ GCASE( cmp_le )
 		ac[i] = a[i] <= c[i];
 	}
 
-	simd_pack<T, sse_kind> pa(a, aligned_t());
-	simd_pack<T, sse_kind> pb(b, aligned_t());
-	simd_pack<T, sse_kind> pc(c, aligned_t());
+	simd_pack<T, sse_kind> pa(a, tag::aligned());
+	simd_pack<T, sse_kind> pb(b, tag::aligned());
+	simd_pack<T, sse_kind> pc(c, tag::aligned());
 
 	ASSERT_TRUE( is_mask_eq(pa <= pb, ab) );
 	ASSERT_TRUE( is_mask_eq(pa <= pc, ac) );
@@ -180,9 +180,9 @@ GCASE( cmp_gt )
 		ac[i] = a[i] > c[i];
 	}
 
-	simd_pack<T, sse_kind> pa(a, aligned_t());
-	simd_pack<T, sse_kind> pb(b, aligned_t());
-	simd_pack<T, sse_kind> pc(c, aligned_t());
+	simd_pack<T, sse_kind> pa(a, tag::aligned());
+	simd_pack<T, sse_kind> pb(b, tag::aligned());
+	simd_pack<T, sse_kind> pc(c, tag::aligned());
 
 	ASSERT_TRUE( is_mask_eq(pa > pb, ab) );
 	ASSERT_TRUE( is_mask_eq(pa > pc, ac) );
@@ -201,9 +201,9 @@ GCASE( cmp_ge )
 		ac[i] = a[i] >= c[i];
 	}
 
-	simd_pack<T, sse_kind> pa(a, aligned_t());
-	simd_pack<T, sse_kind> pb(b, aligned_t());
-	simd_pack<T, sse_kind> pc(c, aligned_t());
+	simd_pack<T, sse_kind> pa(a, tag::aligned());
+	simd_pack<T, sse_kind> pb(b, tag::aligned());
+	simd_pack<T, sse_kind> pc(c, tag::aligned());
 
 	ASSERT_TRUE( is_mask_eq(pa >= pb, ab) );
 	ASSERT_TRUE( is_mask_eq(pa >= pc, ac) );
@@ -321,11 +321,12 @@ GCASE( cond_select_sse2 )
 		r[i] = (msk[i] ? x[i] : y[i]);
 	}
 
-	simd_pack<T, sse_kind> pmv(mskv, aligned_t());
-	simd_pack<T, sse_kind> pm = pmv > simd_pack<T, sse_kind>::zeros();
+	simd_pack<T, sse_kind> pmv(mskv, tag::aligned());
+	simd_pack<T, sse_kind> pzero = tag::all_zeros();
+	simd_pack<T, sse_kind> pm = pmv > pzero;
 
-	simd_pack<T, sse_kind> px(x, aligned_t());
-	simd_pack<T, sse_kind> py(y, aligned_t());
+	simd_pack<T, sse_kind> px(x, tag::aligned());
+	simd_pack<T, sse_kind> py(y, tag::aligned());
 
 	simd_pack<T, sse_kind> pr( cond_sse2(pm, px, py) );
 	ASSERT_SIMD_EQ( pr, r );
@@ -345,11 +346,13 @@ GCASE( cond_select )
 		r[i] = (msk[i] ? x[i] : y[i]);
 	}
 
-	simd_pack<T, sse_kind> pmv(mskv, aligned_t());
-	simd_pack<T, sse_kind> pm = pmv > simd_pack<T, sse_kind>::zeros();
+	simd_pack<T, sse_kind> pmv(mskv, tag::aligned());
 
-	simd_pack<T, sse_kind> px(x, aligned_t());
-	simd_pack<T, sse_kind> py(y, aligned_t());
+	simd_pack<T, sse_kind> pzero = tag::all_zeros();
+	simd_pack<T, sse_kind> pm = pmv > pzero;
+
+	simd_pack<T, sse_kind> px(x, tag::aligned());
+	simd_pack<T, sse_kind> py(y, tag::aligned());
 
 	ASSERT_SIMD_EQ( cond(pm, px, py), r );
 }

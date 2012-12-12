@@ -27,6 +27,18 @@
 #include <cstdio>
 
 
+#if (LSIMD_COMPILER == LSIMD_GCC || LSIMD_COMPILER == LSIMD_CLANG )
+
+#define LSIMD_ALIGN(n) __attribute__((aligned(n)))
+#define LSIMD_ENSURE_INLINE __attribute__((always_inline))
+
+#elif (LSIMD_COMPILER == LSIMD_MSVC)
+
+#define LSIMD_ALIGN(n) __declspec(align(n))
+#define LSIMD_ENSURE_INLINE __forceinline
+
+#endif
+
 namespace lsimd
 {
 	// primitive types
@@ -48,10 +60,14 @@ namespace lsimd
 
 	// tag types
 
-	struct aligned_t { };
-	struct unaligned_t { };
+	namespace tag
+	{
+		struct aligned { };
+		struct unaligned { };
 
-	struct zero_t { };
+		struct all_zeros { };
+		struct all_nonzeros { };
+	}
 
 	// SIMD kind tags
 
@@ -59,6 +75,23 @@ namespace lsimd
 	struct avx_kind { };
 
 	typedef sse_kind default_simd_kind;
+
+	// Auxiliary types
+
+	template<int I>
+	struct int_
+	{
+		static const int value = I;
+	};
+
+	template<int I0, int I1>
+	struct pat2_{ };
+
+	template<int I0, int I1, int I2, int I3>
+	struct pat4_{ };
+
+	template<int I0, int I1, int I2, int I3, int I4, int I5, int I6, int I7>
+	struct pat8_{ };
 
 
 	// forward declarations
@@ -73,17 +106,7 @@ namespace lsimd
 
 }
 
-#if (LSIMD_COMPILER == LSIMD_GCC || LSIMD_COMPILER == LSIMD_CLANG )
 
-#define LSIMD_ALIGN(n) __attribute__((aligned(n)))
-#define LSIMD_ENSURE_INLINE __attribute__((always_inline))
-
-#elif (LSIMD_COMPILER == LSIMD_MSVC)
-
-#define LSIMD_ALIGN(n) __declspec(align(n))
-#define LSIMD_ENSURE_INLINE __forceinline
-
-#endif
 
 #endif /* COMMON_BASE_H_ */
 

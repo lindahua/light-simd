@@ -168,7 +168,7 @@ namespace lsimd
 				src[i] = rand_val(lb_a, ub_a);
 			}
 
-			a.load(src, aligned_t());
+			a.load(src, tag::aligned());
 
 			LSIMD_ALIGN(32) T r0[w];
 
@@ -178,7 +178,7 @@ namespace lsimd
 			}
 
 			simd_pack<T, Kind> r = Op::eval_vector(a);
-			r.store(dst, aligned_t());
+			r.store(dst, tag::aligned());
 
 			for (unsigned i = 0; i < w; ++i)
 			{
@@ -213,8 +213,8 @@ namespace lsimd
 				sb[i] = rand_val(lb_b, ub_b);
 			}
 
-			a.load(sa, aligned_t());
-			b.load(sb, aligned_t());
+			a.load(sa, tag::aligned());
+			b.load(sb, tag::aligned());
 
 			LSIMD_ALIGN(32) T r0[w];
 
@@ -224,7 +224,7 @@ namespace lsimd
 			}
 
 			simd_pack<T, Kind> r = Op::eval_vector(a, b);
-			r.store(dst, aligned_t());
+			r.store(dst, tag::aligned());
 
 			for (unsigned i = 0; i < w; ++i)
 			{

@@ -111,13 +111,13 @@ namespace lsimd
 	LSIMD_ENSURE_INLINE
 	inline sse_f32pk operator ~ (const sse_f32pk& a)
 	{
-		return _mm_xor_ps(a.v, _mm_castsi128_ps(sse_internal::all_one_bits()));
+		return _mm_xor_ps(a.v, _mm_castsi128_ps(_mm_set1_epi32((int)0xffffffff)));
 	}
 
 	LSIMD_ENSURE_INLINE
 	inline sse_f64pk operator ~ (const sse_f64pk& a)
 	{
-		return _mm_xor_pd(a.v, _mm_castsi128_pd(sse_internal::all_one_bits()));
+		return _mm_xor_pd(a.v, _mm_castsi128_pd(_mm_set1_epi32((int)0xffffffff)));
 	}
 
 	LSIMD_ENSURE_INLINE
