@@ -192,7 +192,7 @@ struct min_ts
 
 	static simd_pack<T, sse_kind> eval_vector(const simd_pack<T, sse_kind> x, const simd_pack<T, sse_kind> y)
 	{
-		return vmin(x, y);
+		return (min)(x, y);
 	}
 };
 
@@ -212,7 +212,7 @@ struct max_ts
 
 	static simd_pack<T, sse_kind> eval_vector(const simd_pack<T, sse_kind> x, const simd_pack<T, sse_kind> y)
 	{
-		return vmax(x, y);
+		return (max)(x, y);
 	}
 };
 

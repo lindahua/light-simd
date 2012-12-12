@@ -139,6 +139,29 @@ namespace lsimd
 		return a;
 	}
 
+	LSIMD_ENSURE_INLINE
+	inline sse_f32pk (min)(const sse_f32pk& a, const sse_f32pk& b)
+	{
+		return _mm_min_ps(a.v, b.v);
+	}
+
+	LSIMD_ENSURE_INLINE
+	inline sse_f64pk (min)(const sse_f64pk& a, const sse_f64pk& b)
+	{
+		return _mm_min_pd(a.v, b.v);
+	}
+
+	LSIMD_ENSURE_INLINE
+	inline sse_f32pk (max)(const sse_f32pk& a, const sse_f32pk& b)
+	{
+		return _mm_max_ps(a.v, b.v);
+	}
+	LSIMD_ENSURE_INLINE
+	inline sse_f64pk (max)(const sse_f64pk& a, const sse_f64pk& b)
+	{
+		return _mm_max_pd(a.v, b.v);
+	}
+
 
 	LSIMD_ENSURE_INLINE
 	inline sse_f32pk abs(const sse_f32pk& a)
@@ -151,30 +174,6 @@ namespace lsimd
 	{
 		return _mm_andnot_pd(_mm_set1_pd(-0.0), a.v);
 	}
-
-	LSIMD_ENSURE_INLINE
-	inline sse_f32pk vmin(const sse_f32pk& a, const sse_f32pk& b)
-	{
-		return _mm_min_ps(a.v, b.v);
-	}
-
-	LSIMD_ENSURE_INLINE
-	inline sse_f64pk vmin(const sse_f64pk& a, const sse_f64pk& b)
-	{
-		return _mm_min_pd(a.v, b.v);
-	}
-
-	LSIMD_ENSURE_INLINE
-	inline sse_f32pk vmax(const sse_f32pk& a, const sse_f32pk& b)
-	{
-		return _mm_max_ps(a.v, b.v);
-	}
-	LSIMD_ENSURE_INLINE
-	inline sse_f64pk vmax(const sse_f64pk& a, const sse_f64pk& b)
-	{
-		return _mm_max_pd(a.v, b.v);
-	}
-
 
 	LSIMD_ENSURE_INLINE
 	inline sse_f32pk sqrt(const sse_f32pk& a)
@@ -302,6 +301,19 @@ namespace lsimd
 	{
 		return _mm_div_sd(a.v, b.v);
 	}
+
+	LSIMD_ENSURE_INLINE
+	inline sse_f32pk max_s(const sse_f32pk& a, const sse_f32pk& b)
+	{
+		return _mm_max_ss(a.v, b.v);
+	}
+
+	LSIMD_ENSURE_INLINE
+	inline sse_f64pk min_s(const sse_f64pk& a, const sse_f64pk& b)
+	{
+		return _mm_min_sd(a.v, b.v);
+	}
+
 
 	LSIMD_ENSURE_INLINE
 	inline sse_f32pk rcp_s(const sse_f32pk& a)
