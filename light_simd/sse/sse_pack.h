@@ -29,17 +29,17 @@ namespace lsimd
 	 ******************************************************/
 
 	template<>
-	struct simd_traits<float, sse_kind>
+	struct simd_traits<f32, sse_kind>
 	{
-		typedef float scalar_type;
+		typedef f32 scalar_type;
 		static const unsigned int pack_width = 4;
 	};
 
 
 	template<>
-	struct simd_traits<double, sse_kind>
+	struct simd_traits<f64, sse_kind>
 	{
-		typedef double scalar_type;
+		typedef f64 scalar_type;
 		static const unsigned int pack_width = 2;
 	};
 
@@ -383,13 +383,21 @@ namespace lsimd
 	}; // end struct simd_pack<f64>
 
 
-	// typedefs
+	/********************************************
+	 *
+	 *  Typedef
+	 *
+	 ********************************************/
 
 	typedef simd_pack<f32, sse_kind> sse_f32pk;
 	typedef simd_pack<f64, sse_kind> sse_f64pk;
 
 
-	// Shuffling
+	/********************************************
+	 *
+	 *  Shuffling and Swizzling
+	 *
+	 ********************************************/
 
 	template<int I0, int I1, int I2, int I3>
 	LSIMD_ENSURE_INLINE
