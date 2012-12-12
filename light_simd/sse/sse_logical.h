@@ -13,7 +13,7 @@
 #ifndef LSIMD_SSE_LOGICAL_H_
 #define LSIMD_SSE_LOGICAL_H_
 
-#include "sse_pack.h"
+#include <light_simd/sse/sse_pack.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -111,13 +111,13 @@ namespace lsimd
 	LSIMD_ENSURE_INLINE
 	inline sse_f32pk operator ~ (const sse_f32pk& a)
 	{
-		return _mm_xor_ps(a.v, _mm_castsi128_ps(sse::all_one_bits()));
+		return _mm_xor_ps(a.v, _mm_castsi128_ps(sse_internal::all_one_bits()));
 	}
 
 	LSIMD_ENSURE_INLINE
 	inline sse_f64pk operator ~ (const sse_f64pk& a)
 	{
-		return _mm_xor_pd(a.v, _mm_castsi128_pd(sse::all_one_bits()));
+		return _mm_xor_pd(a.v, _mm_castsi128_pd(sse_internal::all_one_bits()));
 	}
 
 	LSIMD_ENSURE_INLINE

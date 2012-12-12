@@ -13,7 +13,7 @@
 #ifndef LSIMD_SSE_MATH_H_
 #define LSIMD_SSE_MATH_H_
 
-#include "sse_pack.h"
+#include <light_simd/sse/sse_pack.h>
 
 #if defined(LSIMD_USE_INTEL_SVML) || defined(LSIMD_USE_AMD_LIBM)
 #define LSIMD_USE_MATH_FUNCTIONS

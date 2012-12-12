@@ -13,7 +13,7 @@
 #ifndef LSIMD_SSE_PACK_H_
 #define LSIMD_SSE_PACK_H_
 
-#include "details/sse_pack_bits.h"
+#include "internal/sse_pack_internal.h"
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -153,13 +153,13 @@ namespace lsimd
 		template<int I>
 		LSIMD_ENSURE_INLINE void partial_load(const f32 *a)
 		{
-			v = sse::partial_load<I>(a);
+			v = sse_internal::partial_load<I>(a);
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE void partial_store(f32 *a) const
 		{
-			sse::partial_store<I>(a, v);
+			sse_internal::partial_store<I>(a, v);
 		}
 
 
@@ -173,7 +173,7 @@ namespace lsimd
 		template<int I>
 		LSIMD_ENSURE_INLINE f32 extract() const
 		{
-			return sse::f32p_extract<I>(v);
+			return sse_internal::f32p_extract<I>(v);
 		}
 
 		template<int I>
@@ -202,57 +202,57 @@ namespace lsimd
 
 		LSIMD_ENSURE_INLINE simd_pack dup_low() const // (e0, e1, e0, e1)
 		{
-			return sse::f32_dup_low(v);
+			return sse_internal::f32_dup_low(v);
 		}
 
 		LSIMD_ENSURE_INLINE simd_pack dup_high() const // (e2, e3, e2, e3)
 		{
-			return sse::f32_dup_high(v);
+			return sse_internal::f32_dup_high(v);
 		}
 
 		LSIMD_ENSURE_INLINE simd_pack dup2_low() const // (e0, e0, e2, e2)
 		{
-			return sse::f32_dup2_low(v);
+			return sse_internal::f32_dup2_low(v);
 		}
 
 		LSIMD_ENSURE_INLINE simd_pack dup2_high() const // (e1, e1, e3, e3)
 		{
-			return sse::f32_dup2_high(v);
+			return sse_internal::f32_dup2_high(v);
 		}
 
 		// reduction
 
 		LSIMD_ENSURE_INLINE f32 sum() const
 		{
-			return sse::f32_sum(v);
+			return sse_internal::f32_sum(v);
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE f32 partial_sum() const
 		{
-			return sse::f32_partial_sum<I>(v);
+			return sse_internal::f32_partial_sum<I>(v);
 		}
 
 		LSIMD_ENSURE_INLINE f32 (max)() const
 		{
-			return sse::f32_max(v);
+			return sse_internal::f32_max(v);
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE f32 partial_max() const
 		{
-			return sse::f32_partial_max<I>(v);
+			return sse_internal::f32_partial_max<I>(v);
 		}
 
 		LSIMD_ENSURE_INLINE f32 (min)() const
 		{
-			return sse::f32_min(v);
+			return sse_internal::f32_min(v);
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE f32 partial_min() const
 		{
-			return sse::f32_partial_min<I>(v);
+			return sse_internal::f32_partial_min<I>(v);
 		}
 
 		// constants
@@ -264,7 +264,7 @@ namespace lsimd
 
 		LSIMD_ENSURE_INLINE static simd_pack true_mask()
 		{
-			return _mm_castsi128_ps(sse::all_one_bits());
+			return _mm_castsi128_ps(sse_internal::all_one_bits());
 		}
 
 		LSIMD_ENSURE_INLINE static simd_pack zeros()
@@ -413,13 +413,13 @@ namespace lsimd
 		template<int I>
 		LSIMD_ENSURE_INLINE void partial_load(const f64 *a)
 		{
-			v = sse::partial_load<I>(a);
+			v = sse_internal::partial_load<I>(a);
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE void partial_store(f64 *a) const
 		{
-			sse::partial_store<I>(a, v);
+			sse_internal::partial_store<I>(a, v);
 		}
 
 
@@ -433,7 +433,7 @@ namespace lsimd
 		template<int I>
 		LSIMD_ENSURE_INLINE f64 extract() const
 		{
-			return sse::f64p_extract<I>(v);
+			return sse_internal::f64p_extract<I>(v);
 		}
 
 		template<int I>
@@ -462,12 +462,12 @@ namespace lsimd
 
 		LSIMD_ENSURE_INLINE simd_pack dup_low() const
 		{
-			return sse::f64_dup_low(v);
+			return sse_internal::f64_dup_low(v);
 		}
 
 		LSIMD_ENSURE_INLINE simd_pack dup_high() const
 		{
-			return sse::f64_dup_high(v);
+			return sse_internal::f64_dup_high(v);
 		}
 
 
@@ -475,35 +475,35 @@ namespace lsimd
 
 		LSIMD_ENSURE_INLINE f64 sum() const
 		{
-			return sse::f64_sum(v);
+			return sse_internal::f64_sum(v);
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE f64 partial_sum() const
 		{
-			return sse::f64_partial_sum<I>(v);
+			return sse_internal::f64_partial_sum<I>(v);
 		}
 
 		LSIMD_ENSURE_INLINE f64 (max)() const
 		{
-			return sse::f64_max(v);
+			return sse_internal::f64_max(v);
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE f64 partial_max() const
 		{
-			return sse::f64_partial_max<I>(v);
+			return sse_internal::f64_partial_max<I>(v);
 		}
 
 		LSIMD_ENSURE_INLINE f64 (min)() const
 		{
-			return sse::f64_min(v);
+			return sse_internal::f64_min(v);
 		}
 
 		template<int I>
 		LSIMD_ENSURE_INLINE f64 partial_min() const
 		{
-			return sse::f64_partial_min<I>(v);
+			return sse_internal::f64_partial_min<I>(v);
 		}
 
 
@@ -516,7 +516,7 @@ namespace lsimd
 
 		LSIMD_ENSURE_INLINE static simd_pack true_mask()
 		{
-			return _mm_castsi128_pd(sse::all_one_bits());
+			return _mm_castsi128_pd(sse_internal::all_one_bits());
 		}
 
 		LSIMD_ENSURE_INLINE static simd_pack zeros()

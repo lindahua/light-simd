@@ -84,7 +84,7 @@ set(SSE_BASIC_HS
     ${INC}/sse/sse_pack.h 
     ${INC}/sse/sse_arith.h
     ${INC}/sse/sse_logical.h
-    ${INC}/sse/details/sse_pack_bits.h)
+    ${INC}/sse/internal/sse_pack_internal.h)
 
 set(SSE_MATH_HS 
     ${INC}/sse/sse_math.h)

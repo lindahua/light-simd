@@ -15,9 +15,6 @@
 
 #include <light_simd/sse/sse_arith.h>
 #include <light_simd/sse/sse_logical.h>
-
 #include <light_simd/sse/sse_math.h>
-#include <light_simd/sse/sse_vec.h>
-#include <light_simd/sse/sse_mat.h>
 
 #endif /* SSE_H_ */

@@ -13,7 +13,7 @@
 #ifndef LSIMD_SSE_ARITH_H_
 #define LSIMD_SSE_ARITH_H_
 
-#include "sse_pack.h"
+#include <light_simd/sse/sse_pack.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)

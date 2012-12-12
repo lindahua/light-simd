@@ -1,5 +1,5 @@
 /**
- * @file sse_pack_bits.h
+ * @file sse_pack_internal.h
  *
  * Internal implementation for SSE packs
  *
@@ -10,17 +10,17 @@
 #pragma once
 #endif
 
-#ifndef LSIMD_SSE_PACK_BITS_H_
-#define LSIMD_SSE_PACK_BITS_H_
+#ifndef LSIMD_SSE_PACK_INTERNAL_H_
+#define LSIMD_SSE_PACK_INTERNAL_H_
 
-#include "../sse_base.h"
+#include <light_simd/sse/sse_base.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4141)
 #endif
 
-namespace lsimd {  namespace sse {
+namespace lsimd {  namespace sse_internal {
 
 
 	/********************************************
